@@ -17,15 +17,21 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
-
-        return httpSecurity.authorizeHttpRequests(
-                auth -> auth.requestMatchers("/user").permitAll()
-                .requestMatchers("/login").permitAll()
-                .requestMatchers("/session_code").permitAll()
-                .anyRequest().authenticated()).httpBasic(withDefaults())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(AnyRequestMatcher.INSTANCE)).cors().and().build();
+    SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/user/register").permitAll() // aquí el endpoint real
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/session_code").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(withDefaults())
+                .csrf(csrf -> csrf.ignoringRequestMatchers(AnyRequestMatcher.INSTANCE))
+                .cors().and()
+                .build();
     }
+
+
 
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
