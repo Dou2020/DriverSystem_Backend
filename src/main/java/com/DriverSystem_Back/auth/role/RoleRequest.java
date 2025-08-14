@@ -1,4 +1,11 @@
 package com.DriverSystem_Back.auth.role;
 
-public class RoleRequest {
+import jakarta.validation.constraints.NotBlank;
+
+public record RoleRequest(
+        @NotBlank String name,
+        @NotBlank String code
+) {
+
 }
+
