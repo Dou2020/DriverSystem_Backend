@@ -1,6 +1,5 @@
-package com.DriverSystem_Back.auth.role;
+package com.DriverSystem_Back.modules.auth.role;
 
-import java.math.BigInteger;
 import java.util.List;
 
 public interface IRoleService {

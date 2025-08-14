@@ -1,6 +1,4 @@
-package com.DriverSystem_Back.auth.role;
-
-import java.math.BigInteger;
+package com.DriverSystem_Back.modules.auth.role;
 
 public record RoleResponse(Long id, String name, String code) {
 

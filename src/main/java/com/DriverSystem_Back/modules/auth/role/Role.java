@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.auth.role;
+package com.DriverSystem_Back.modules.auth.role;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.auth.user;
+package com.DriverSystem_Back.modules.auth.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

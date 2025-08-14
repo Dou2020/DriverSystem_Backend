@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.auth.user;
+package com.DriverSystem_Back.modules.auth.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

@@ -18,7 +18,7 @@ CREATE TABLE app_user (
     -- credenciales / acceso
                           username text NOT NULL,
                           email    text NOT NULL,
-                          phone    text,
+                          phone    text NOT NULL  UNIQUE,
                           password_hash text NOT NULL,
                           is_active boolean NOT NULL DEFAULT true,
                           created_at timestamptz NOT NULL DEFAULT now(),

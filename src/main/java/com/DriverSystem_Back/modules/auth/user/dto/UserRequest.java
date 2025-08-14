@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.auth.user.dto;
+package com.DriverSystem_Back.modules.auth.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

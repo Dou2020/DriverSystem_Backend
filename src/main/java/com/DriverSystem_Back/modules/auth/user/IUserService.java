@@ -1,7 +1,7 @@
-package com.DriverSystem_Back.auth.user;
+package com.DriverSystem_Back.modules.auth.user;
 
-import com.DriverSystem_Back.auth.user.dto.UserRequest;
-import com.DriverSystem_Back.auth.user.dto.UserResponse;
+import com.DriverSystem_Back.modules.auth.user.dto.UserRequest;
+import com.DriverSystem_Back.modules.auth.user.dto.UserResponse;
 
 import java.util.List;
 

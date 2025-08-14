@@ -1,9 +1,7 @@
-package com.DriverSystem_Back.auth.user;
+package com.DriverSystem_Back.modules.auth.user;
 
-import com.DriverSystem_Back.auth.role.RoleRequest;
-import com.DriverSystem_Back.auth.role.RoleResponse;
-import com.DriverSystem_Back.auth.user.dto.UserRequest;
-import com.DriverSystem_Back.auth.user.dto.UserResponse;
+import com.DriverSystem_Back.modules.auth.user.dto.UserRequest;
+import com.DriverSystem_Back.modules.auth.user.dto.UserResponse;
 import com.DriverSystem_Back.exceptions.ServiceNotSaveException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @Service
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("/user")
 
 public class UserController {
     @Autowired
     private  IUserService userService;
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public ResponseEntity<?> RegisterUser(@RequestBody @Valid UserRequest body) {
         try {
             UserResponse newUser = this.userService.saveUser(body);

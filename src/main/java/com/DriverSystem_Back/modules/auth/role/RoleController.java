@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.auth.role;
+package com.DriverSystem_Back.modules.auth.role;
 
 import com.DriverSystem_Back.exceptions.ServiceNotSaveException;
 import jakarta.validation.Valid;
@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @RestController

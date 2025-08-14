@@ -1,6 +1,6 @@
-package com.DriverSystem_Back.auth.user.dto;
+package com.DriverSystem_Back.modules.auth.user.dto;
 
-import com.DriverSystem_Back.auth.user.User;
+import com.DriverSystem_Back.modules.auth.user.User;
 
 import java.time.OffsetDateTime;
 
