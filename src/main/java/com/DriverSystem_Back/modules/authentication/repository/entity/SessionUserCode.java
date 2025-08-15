@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table
-@Entity
+//@Entity
 public class SessionUserCode {
 
 }
