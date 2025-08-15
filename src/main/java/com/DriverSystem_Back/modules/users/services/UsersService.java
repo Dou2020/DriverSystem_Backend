@@ -18,12 +18,8 @@ public class UsersService {
 
     public Users getByEmail(String email){
 
-        Optional<Users> usersOptional = userRepository.findByEmail(email);
-
-        if(usersOptional.isEmpty()){
-            throw new HttpException("The user was not found", HttpStatus.NOT_FOUND);
-        }
-        return usersOptional.get();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new HttpException("The user was not found", HttpStatus.NOT_FOUND));
     }
 
     public Boolean verifyUserPassword(String password, String passwordHashed){
