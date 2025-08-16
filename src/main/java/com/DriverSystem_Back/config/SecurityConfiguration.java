@@ -20,7 +20,7 @@ public class SecurityConfiguration {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/register").permitAll() // aquí el endpoint real
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/session_code").permitAll()
                         .anyRequest().authenticated()

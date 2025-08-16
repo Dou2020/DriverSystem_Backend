@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.modules.auth.role;
+package com.DriverSystem_Back.modules.role;
 
 import com.DriverSystem_Back.exceptions.ServiceNotSaveException;
 import jakarta.validation.Valid;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/role")
+@RequestMapping("api/role")
 public class RoleController {
     @Autowired
     private  IRoleService roleService;
@@ -37,4 +37,5 @@ public class RoleController {
         RoleResponse role = this.roleService.getRoleById(id);
         return ResponseEntity.ok(role);
     }
+
 }

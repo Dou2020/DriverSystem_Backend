@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.modules.auth.role;
+package com.DriverSystem_Back.modules.role;
 
 import com.DriverSystem_Back.exceptions.ServiceNotSaveException;
 import org.springframework.beans.factory.annotation.Autowired;
