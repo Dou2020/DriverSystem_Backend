@@ -19,7 +19,7 @@ public class UsersService {
     public Users getByEmail(String email){
 
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new HttpException("The user was not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new HttpException("el usuario no encontrado", HttpStatus.NOT_FOUND));
     }
 
     public Boolean verifyUserPassword(String password, String passwordHashed){
