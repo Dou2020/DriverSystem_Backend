@@ -44,8 +44,8 @@ CREATE TABLE user_role (
 CREATE TABLE user_mfa (
                           id BIGSERIAL PRIMARY KEY,
                           user_id BIGINT NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
-                          mfa_type text NOT NULL CHECK (mfa_type IN ('TOTP','EMAIL','SMS')),
                           target text NOT NULL,
+                          ts_expired TIMESTAMPTZ NOT NULL,
                           enabled boolean NOT NULL DEFAULT true,
                           created_at timestamptz NOT NULL DEFAULT now()
 );

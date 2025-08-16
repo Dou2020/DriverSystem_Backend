@@ -4,11 +4,13 @@ import com.DriverSystem_Back.exception.HttpException;
 import com.DriverSystem_Back.modules.users.repository.cruds.UserCrud;
 import com.DriverSystem_Back.modules.users.repository.entities.Users;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Repository
 public class UsersRepository {
@@ -25,5 +27,7 @@ public class UsersRepository {
     public Optional<Users> findByEmail(String email){
         return usersCrud.findByEmail(email);
     }
+
+    public Optional<Users> findById(String userId){ return usersCrud.findById(userId); }
 
 }
