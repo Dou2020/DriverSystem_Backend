@@ -28,6 +28,6 @@ public class UsersRepository {
         return usersCrud.findByEmail(email);
     }
 
-    public Optional<Users> findById(String userId){ return usersCrud.findById(userId); }
+    public Optional<Users> findById(long userId){ return usersCrud.findById(userId+""); }
 
 }
