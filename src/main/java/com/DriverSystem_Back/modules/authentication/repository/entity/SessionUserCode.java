@@ -35,8 +35,8 @@ public class SessionUserCode {
     @Column(name = "target", nullable = false)
     private String target; // ej. el número de teléfono para SMS o el email
 
-    @Column(name = "ts_expired", nullable = false)
-    private LocalDateTime tsExpired;
+    @Column(name = "ts_expired", nullable = false, columnDefinition = "TIMESTAMPTZ")
+    private OffsetDateTime tsExpired;
 
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true; // Valor por defecto inicializado en Java

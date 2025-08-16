@@ -55,7 +55,7 @@ public class SessionUserCodeService {
             sessionUserCode.setUser(userFound);
             sessionUserCode.setTarget(sessionUserCodeDto.getCode());
             sessionUserCode.setTsExpired(sessionUserCodeDto.getTsExpired());
-            sessionUserCodeRepository.updateSessionUserCode(sessionUserCode);
+            //sessionUserCodeRepository.updateSessionUserCode(sessionUserCode);
         }
     }
 

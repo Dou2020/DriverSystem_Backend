@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 
 @Getter
@@ -12,6 +13,6 @@ public class SessionUserCodeDto {
 
     private String code;
     private String userId;
-    private LocalDateTime tsExpired;
+    private OffsetDateTime tsExpired;
 
 }
