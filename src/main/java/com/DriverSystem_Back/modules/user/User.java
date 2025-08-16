@@ -1,9 +1,10 @@
-package com.DriverSystem_Back.modules.auth.user;
+package com.DriverSystem_Back.modules.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 

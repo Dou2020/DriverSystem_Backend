@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.modules.auth.role;
+package com.DriverSystem_Back.modules.role;
 
 import java.util.List;
 

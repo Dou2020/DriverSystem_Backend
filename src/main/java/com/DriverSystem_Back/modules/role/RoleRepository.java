@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.modules.auth.role;
+package com.DriverSystem_Back.modules.role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
