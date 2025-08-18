@@ -48,7 +48,7 @@ public class SessionUserCodeService {
         Optional<Users> userOptional = usersRepository.findById(sessionUserCodeDto.getUserId());
 
         if(userOptional.isEmpty()){
-            throw new HttpException("The user was not found", HttpStatus.NOT_FOUND);
+            throw new HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND);
         }
 
         Users userFound = userOptional.get();
@@ -62,7 +62,7 @@ public class SessionUserCodeService {
             sessionUserCode.setUser(userFound);
             sessionUserCode.setCode(sessionUserCodeDto.getCode());
             sessionUserCode.setTsExpired(sessionUserCodeDto.getTsExpired());
-            //sessionUserCodeRepository.updateSessionUserCode(sessionUserCode);
+            sessionUserCodeRepository.UpdateSessionUserCode(sessionUserCode);
         }
     }
 
@@ -79,7 +79,7 @@ public class SessionUserCodeService {
             throw new HttpException("El codigo Expiró", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseHttpDto(HttpStatus.ACCEPTED.value(), "The code value is acceptable");
+        return new ResponseHttpDto(HttpStatus.ACCEPTED.value(), "El codigo es valido");
     }
 
 }

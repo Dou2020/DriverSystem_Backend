@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Repository
 public interface SessionUserCodeCrud extends JpaRepository<SessionUserCode, String> {
 
-    @Query(value = "UPDATE user_mfa (user_id, mfa_type, target, enabled) VALUES(?,?,?,?)", nativeQuery = true)
-    void UpdateSessionUserCode(long userID, String mfaType, Boolean status );
+    @Query(value = "UPDATE user_mfa SET code=?, ts_expired=? WHERE user_id=? ", nativeQuery = true)
+    void UpdateSessionUserCode(String newCode, OffsetDateTime tsExpired, long userId);
 
     @Query(value = "select * from user_mfa where user_id = ? ;",nativeQuery = true)
     Optional<SessionUserCode> findByUser(long userId);

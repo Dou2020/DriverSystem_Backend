@@ -57,7 +57,7 @@ public class LoginService {
             sessionUserCodeDto.setCode(userCode);
             sessionUserCodeDto.setUserId(userFound.getId());
             sessionUserCodeDto.setTsExpired(createExpirationDate());
-            userCodeService.saveSessionUser(sessionUserCodeDto);
+            userCodeService.updateOrSaveSessionCode(sessionUserCodeDto);
         }else {
             throw new HttpException("Las credenciales del usuario son Incorrectas", HttpStatus.NOT_FOUND);
         }

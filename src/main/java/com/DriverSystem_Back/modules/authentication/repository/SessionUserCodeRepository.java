@@ -28,7 +28,7 @@ public class SessionUserCodeRepository {
 
     public void UpdateSessionUserCode(SessionUserCode sessionUserCode){
         try {
-            sessionUserCodeCrud.UpdateSessionUserCode(sessionUserCode.getUser().getId(), sessionUserCode.getMfaType().name(), sessionUserCode.isEnabled());
+            sessionUserCodeCrud.UpdateSessionUserCode(sessionUserCode.getCode(),sessionUserCode.getTsExpired(),sessionUserCode.getUser().getId());
         }catch (Exception exception){
             log.info(exception.getMessage());
         }
