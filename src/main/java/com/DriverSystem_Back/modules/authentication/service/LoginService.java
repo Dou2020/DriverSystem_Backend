@@ -4,6 +4,7 @@ import com.DriverSystem_Back.dto_common.ResponseHttpDto;
 import com.DriverSystem_Back.exception.HttpException;
 import com.DriverSystem_Back.modules.authentication.dto.LoginDto;
 import com.DriverSystem_Back.modules.authentication.dto.SessionUserCodeDto;
+import com.DriverSystem_Back.modules.authentication.repository.entity.SessionUserCode;
 import com.DriverSystem_Back.modules.users.repository.entities.Users;
 import com.DriverSystem_Back.modules.users.services.UsersService;
 import com.DriverSystem_Back.properties.EmailProperties;
@@ -26,6 +27,8 @@ public class LoginService {
 
     private final UsersService userService;
     private final EmailProperties emailProperties;
+    private final SessionUserCodeService userCodeService;
+
     @Autowired
     private final JavaMailSender mailSender;
 
@@ -49,11 +52,12 @@ public class LoginService {
         if (userService.verifyUserPassword(loginDto.getPassword(), userFound.getPasswordHash())){
             String userCode = CodeUtils.generateVerificationCode();
             log.info(emailProperties.getMessage()+" "+emailProperties.getIssue()+"  "+loginDto.getEmail());
-            sendEmail(loginDto.getEmail(),"Taller AyD1", "Codigo ".concat(": ").concat(userCode));
+            sendEmail(loginDto.getEmail(),"Taller AyD1", "Código ".concat(": ").concat(userCode));
             SessionUserCodeDto sessionUserCodeDto = new SessionUserCodeDto();
             sessionUserCodeDto.setCode(userCode);
             sessionUserCodeDto.setUserId(userFound.getId());
             sessionUserCodeDto.setTsExpired(createExpirationDate());
+            userCodeService.saveSessionUser(sessionUserCodeDto);
         }else {
             throw new HttpException("Las credenciales del usuario son Incorrectas", HttpStatus.NOT_FOUND);
         }
@@ -62,7 +66,7 @@ public class LoginService {
     }
 
     private OffsetDateTime createExpirationDate() {
-        return OffsetDateTime.now().plusMinutes(1);
+        return OffsetDateTime.now().plusMinutes(5);
     }
 
 }
