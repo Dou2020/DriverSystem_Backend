@@ -16,18 +16,19 @@ import java.util.Optional;
 public class SessionUserCodeRepository {
     private final SessionUserCodeCrud sessionUserCodeCrud;
 
-    public SessionUserCode saveSession(SessionUserCode sessionUserCode){
+    public SessionUserCode saveSessionUser(SessionUserCode sessionUserCode){
         try{
+            log.info(sessionUserCode.toString());
             return sessionUserCodeCrud.save(sessionUserCode);
         }catch (Exception ex){
             log.error("Error trying save session user crud: {}",ex);
-            throw new HttpException("Error trying save/update session user code", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException("Error trying save session user code 22", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public void insertSessionUserCode(SessionUserCode sessionUserCode){
+    public void UpdateSessionUserCode(SessionUserCode sessionUserCode){
         try {
-            sessionUserCodeCrud.CreateSessionUserCode(sessionUserCode.getUser().getId(), sessionUserCode.getMfaType().name(), sessionUserCode.getTarget(), sessionUserCode.isEnabled());
+            sessionUserCodeCrud.UpdateSessionUserCode(sessionUserCode.getCode(),sessionUserCode.getTsExpired(),sessionUserCode.getUser().getId());
         }catch (Exception exception){
             log.info(exception.getMessage());
         }
@@ -37,4 +38,5 @@ public class SessionUserCodeRepository {
         return sessionUserCodeCrud.findByUser(userId);
     }
 
+    public Optional<SessionUserCode> findByCode(String code){ return sessionUserCodeCrud.findById(code); }
 }

@@ -18,8 +18,8 @@ import java.time.OffsetDateTime;
 @Entity
 public class SessionUserCode {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "code")
+    private String code;
 
     // --- Relaciones ---
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -32,16 +32,10 @@ public class SessionUserCode {
     @Column(name = "mfa_type", nullable = false)
     private MfaType mfaType;
 
-    @Column(name = "target", nullable = false)
-    private String target; // ej. el número de teléfono para SMS o el email
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled = true; // Valor por defecto inicializado en Java
 
     @Column(name = "ts_expired", nullable = false, columnDefinition = "TIMESTAMPTZ")
     private OffsetDateTime tsExpired;
 
-    @Column(name = "enabled", nullable = false)
-    private boolean enabled = true; // Valor por defecto inicializado en Java
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
 }
