@@ -1,6 +1,5 @@
 package com.DriverSystem_Back.modules.role;
 
-import com.DriverSystem_Back.exceptions.ServiceNotSaveException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +22,8 @@ public class RoleController {
 
     @PostMapping("/")
     public ResponseEntity<?> saveRole(@RequestBody @Valid RoleRequest body) {
-        try {
             RoleResponse newRole = this.roleService.saveRole(body);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newRole);
-        } catch (ServiceNotSaveException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+            return ResponseEntity.ok(newRole);
     }
 
 

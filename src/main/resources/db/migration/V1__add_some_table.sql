@@ -75,7 +75,7 @@ CREATE TABLE vehicle_model (
 
 CREATE TABLE vehicle (
                          id BIGSERIAL PRIMARY KEY,
-                         customer_id BIGINT NOT NULL REFERENCES app_user(id) ON DELETE RESTRICT, -- debe ser CLIENTE/CUSTOMER
+                     --  customer_id BIGINT NOT NULL REFERENCES app_user(id) ON DELETE RESTRICT, -- debe ser CLIENTE/CUSTOMER
                          vin   text UNIQUE,
                          plate text UNIQUE,
                          make_id  BIGINT NOT NULL REFERENCES vehicle_make(id) ON DELETE RESTRICT,
@@ -84,7 +84,7 @@ CREATE TABLE vehicle (
   color text,
   created_at timestamptz NOT NULL DEFAULT now()
 );
-CREATE INDEX ix_vehicle_customer ON vehicle(customer_id);
+-- CREATE INDEX ix_vehicle_customer ON vehicle(customer_id);
 
 -- Entradas / salidas del vehículo al taller
 CREATE TABLE vehicle_visit (

@@ -1,7 +1,8 @@
 package com.DriverSystem_Back.modules.role;
 
-import com.DriverSystem_Back.exceptions.ServiceNotSaveException;
+import com.DriverSystem_Back.exception.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class RoleService  implements IRoleService{
     public RoleResponse getRoleById(Long id) {
         Optional<Role> optional = this.roleRepository.findById(id);
         if (optional.isEmpty())
-            throw new ServiceNotSaveException("El rol no existe!");
+            throw  new HttpException("El rol no existe!", HttpStatus.NOT_FOUND);
         Role role = optional.get();
         return new RoleResponse(role);
     }
@@ -26,7 +27,7 @@ public class RoleService  implements IRoleService{
     public RoleResponse saveRole(RoleRequest request) {
         Optional<Role> optional = this.roleRepository.findByName(request.name());
         if (optional.isPresent()) {
-            throw new ServiceNotSaveException("El rol ya existe!");
+            throw  new HttpException("El rol ya existe!!", HttpStatus.UNPROCESSABLE_ENTITY);
         }
         Role role = new Role();
         role.setName(request.name());

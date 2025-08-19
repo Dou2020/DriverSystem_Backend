@@ -1,14 +1,15 @@
 package com.DriverSystem_Back.modules.user;
 
-import com.DriverSystem_Back.modules.UserRole.UserRole;
-import com.DriverSystem_Back.modules.UserRole.UserRoleRepository;
+import com.DriverSystem_Back.exception.HttpException;
+import com.DriverSystem_Back.modules.Userrole.UserRole;
+import com.DriverSystem_Back.modules.Userrole.UserRoleRepository;
 import com.DriverSystem_Back.modules.user.dto.UserActiveUser;
 import com.DriverSystem_Back.modules.user.dto.UserRequest;
 import com.DriverSystem_Back.modules.user.dto.UserResponse;
-import com.DriverSystem_Back.exceptions.ServiceNotSaveException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,11 +46,8 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponse saveUser(UserRequest request) {
-        Optional<User> optional = this.userRepository.findByEmail(request.email());
-        if (optional.isPresent())
-            throw new ServiceNotSaveException("El usuario ya existe!");
         User user= this.modelMapper.map(request, User.class);
-        user.setIs_active(true);  // Activo por defecto
+        user.setIs_active(false);
         user.setCreated_at(OffsetDateTime.now());
         user.setPasswordHash(passwordEncoder.encode(request.passwordHash()));
         User saved = this.userRepository.save(user);
@@ -66,8 +64,7 @@ public class UserService implements IUserService {
     @Override
     public UserResponse updateUser(UserRequest request) {
             User existingUser = this.userRepository.findById(request.id())
-                    .orElseThrow(() -> new ServiceNotSaveException("El usuario no existe!"));
-
+                    .orElseThrow(() ->  new HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
             existingUser.setName(request.name());
             existingUser.setEmail(request.email());
             existingUser.setUserName(request.userName());
@@ -93,12 +90,18 @@ public class UserService implements IUserService {
     @Override
     public UserActiveUser updateActiveUser(UserActiveUser user) {
         User existingUser = this.userRepository.findById(user.id())
-                .orElseThrow(() -> new ServiceNotSaveException("El usuario no existe!"));
+                .orElseThrow(() ->  new  HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
         if (existingUser.getIs_active().equals(user.state()))
-            throw new ServiceNotSaveException("El usuario ya tiene el estado indicado!");
+            throw new HttpException("El usuario ya tiene el estado indicado!", HttpStatus.UNPROCESSABLE_ENTITY);
         existingUser.setIs_active(user.state());
         this.userRepository.save(existingUser);
         return new UserActiveUser(existingUser.getId(), existingUser.getIs_active());
+    }
+    public  Optional<User> validateUser(Long id){
+        Optional<User> optional = this.userRepository.findById(id);
+        if (optional.isEmpty())
+            throw new HttpException("Usuario no encontrado!!", HttpStatus.NOT_FOUND);
+        return optional;
     }
 
 }

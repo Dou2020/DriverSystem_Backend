@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.modules.UserRole;
+package com.DriverSystem_Back.modules.Userrole;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
