@@ -20,6 +20,13 @@ public class SecurityConfiguration {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/**").permitAll()
+                        //http://localhost:8080/swagger-ui/index.html
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs.yaml"
+                        ).permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/session_code").permitAll()
                         .anyRequest().authenticated()

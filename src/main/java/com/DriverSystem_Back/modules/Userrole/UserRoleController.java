@@ -1,9 +1,7 @@
-package com.DriverSystem_Back.modules.UserRole;
+package com.DriverSystem_Back.modules.Userrole;
 
-import com.DriverSystem_Back.exceptions.ServiceNotSaveException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,11 +19,7 @@ public class UserRoleController {
 
     @PutMapping("/")
     public ResponseEntity<?> updateRole(@RequestBody @Valid UserRoleRequest body) {
-        try {
-            UserRole newRole = this.userRoleService.updateRole(body);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newRole);
-        } catch (ServiceNotSaveException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        UserRole newRole = this.userRoleService.updateRole(body);
+        return ResponseEntity.ok().body(newRole);
     }
 }

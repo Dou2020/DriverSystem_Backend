@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.modules.UserRole;
+package com.DriverSystem_Back.modules.Userrole;
 
 public interface IUserRoleService {
     public UserRole findById(Long userId);
