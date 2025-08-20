@@ -27,7 +27,8 @@ CREATE TABLE app_user (
                           user_type text NOT NULL CHECK (user_type IN ('PERSON','ORGANIZATION')),
                           doc_type  text,
                           doc_number text,
-                          name text NOT NULL
+                          name text NOT NULL,
+                          usa_mfa boolean NOT NULL DEFAULT false
 );
 CREATE UNIQUE INDEX uq_app_user_username_ci ON app_user (lower(username));
 CREATE UNIQUE INDEX uq_app_user_email_ci    ON app_user (lower(email));

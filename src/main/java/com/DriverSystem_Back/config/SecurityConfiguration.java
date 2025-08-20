@@ -17,24 +17,12 @@ public class SecurityConfiguration {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
-                        //http://localhost:8080/swagger-ui/index.html
-                        .requestMatchers(
-                                "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/v3/api-docs.yaml"
-                        ).permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/session_code").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(withDefaults())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(AnyRequestMatcher.INSTANCE))
-                .cors().and()
-                .build();
+    return httpSecurity
+        .authorizeHttpRequests(auth -> auth
+            .anyRequest().permitAll()
+        )
+        .csrf(csrf -> csrf.disable())
+        .build();
     }
 
 

@@ -37,4 +37,7 @@ public class Users {
     @Column(name = "created_at")
     private OffsetDateTime created_at;
 
+    @Column(name = "usa_mfa", nullable = false)
+    private Boolean usaMfa = false;
+
 }
