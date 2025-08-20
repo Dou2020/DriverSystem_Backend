@@ -1,5 +1,10 @@
 package com.DriverSystem_Back.modules.authentication.service;
 
+import com.DriverSystem_Back.modules.Userrole.IUserRoleService;
+import com.DriverSystem_Back.modules.Userrole.UserRole;
+import com.DriverSystem_Back.modules.role.Role;
+import com.DriverSystem_Back.modules.role.RoleRepository;
+
 import com.DriverSystem_Back.dto_common.ResponseHttpDto;
 import com.DriverSystem_Back.exception.HttpException;
 import com.DriverSystem_Back.modules.authentication.dto.CodeDto;
@@ -19,13 +24,24 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class SessionUserCodeService {
     private final SessionUserCodeRepository sessionUserCodeRepository;
     private final UsersRepository usersRepository;
-
+    private final IUserRoleService userRoleService;
+    private final RoleRepository roleRepository;
+    @Autowired
+    public SessionUserCodeService(SessionUserCodeRepository sessionUserCodeRepository,
+                                  UsersRepository usersRepository,
+                                  IUserRoleService userRoleService,
+                                  RoleRepository roleRepository) {
+        this.sessionUserCodeRepository = sessionUserCodeRepository;
+        this.usersRepository = usersRepository;
+        this.userRoleService = userRoleService;
+        this.roleRepository = roleRepository;
+    }
 
     public void saveSessionUser(SessionUserCodeDto sessionUserCodeDto){
         Optional<Users> userOptional = usersRepository.findById(sessionUserCodeDto.getUserId());
@@ -79,7 +95,26 @@ public class SessionUserCodeService {
             throw new HttpException("El codigo Expiró", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseHttpDto(HttpStatus.ACCEPTED.value(), "El codigo es valido");
+        // Obtener el usuario y su rol real desde user_role/app_role
+        String roleName = null;
+        if (sessionUserCode.getUser() != null) {
+            Long userId = sessionUserCode.getUser().getId();
+            try {
+                UserRole userRole = userRoleService.findById(userId);
+                if (userRole != null) {
+                    Long roleId = userRole.getRoleId();
+                    Role role = roleRepository.findById(roleId).orElse(null);
+                    if (role != null) {
+                        roleName = role.getCode();
+                    }
+                }
+            } catch (Exception e) {
+                // Si no tiene rol, se deja como null
+            }
+        }
+
+        String message = "El codigo es valido";
+        return new ResponseHttpDto(HttpStatus.ACCEPTED.value(), message, roleName, null);
     }
 
 }

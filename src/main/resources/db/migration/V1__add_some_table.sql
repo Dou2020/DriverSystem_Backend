@@ -27,7 +27,8 @@ CREATE TABLE app_user (
                           user_type text NOT NULL CHECK (user_type IN ('PERSON','ORGANIZATION')),
                           doc_type  text,
                           doc_number text,
-                          name text NOT NULL
+                          name text NOT NULL,
+                          usa_mfa boolean NOT NULL DEFAULT false
 );
 CREATE UNIQUE INDEX uq_app_user_username_ci ON app_user (lower(username));
 CREATE UNIQUE INDEX uq_app_user_email_ci    ON app_user (lower(email));
@@ -80,8 +81,8 @@ CREATE TABLE vehicle (
                          make_id  BIGINT NOT NULL REFERENCES vehicle_make(id) ON DELETE RESTRICT,
                          model_id BIGINT NOT NULL REFERENCES vehicle_model(id) ON DELETE RESTRICT,
                          model_year int CHECK (model_year BETWEEN 1950 AND extract(year from now())::int + 1),
-  color text,
-  created_at timestamptz NOT NULL DEFAULT now()
+                         color text,
+                         created_at timestamptz NOT NULL DEFAULT now()
 );
 -- CREATE INDEX ix_vehicle_customer ON vehicle(customer_id);
 

@@ -6,6 +6,7 @@ import com.DriverSystem_Back.modules.Userrole.UserRoleRepository;
 import com.DriverSystem_Back.modules.user.dto.UserActiveUser;
 import com.DriverSystem_Back.modules.user.dto.UserRequest;
 import com.DriverSystem_Back.modules.user.dto.UserResponse;
+import com.DriverSystem_Back.modules.user.dto.UserSendEmail;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -97,6 +98,19 @@ public class UserService implements IUserService {
         this.userRepository.save(existingUser);
         return new UserActiveUser(existingUser.getId(), existingUser.getIs_active());
     }
+
+    @Override
+    public UserSendEmail updateSendEmail(UserSendEmail user) {
+        User existingUser = this.userRepository.findById(user.id())
+                .orElseThrow(() ->  new  HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
+
+        if (existingUser.getUsaMfa().equals(user.state()))
+            throw new HttpException("El usuario ya tiene el estado indicado!", HttpStatus.UNPROCESSABLE_ENTITY);
+        existingUser.setUsaMfa(user.state());
+        this.userRepository.save(existingUser);
+        return new UserSendEmail(existingUser.getId(), existingUser.getIs_active());
+    }
+
     public  Optional<User> validateUser(Long id){
         Optional<User> optional = this.userRepository.findById(id);
         if (optional.isEmpty())
