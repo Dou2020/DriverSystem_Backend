@@ -81,8 +81,8 @@ CREATE TABLE vehicle (
                          make_id  BIGINT NOT NULL REFERENCES vehicle_make(id) ON DELETE RESTRICT,
                          model_id BIGINT NOT NULL REFERENCES vehicle_model(id) ON DELETE RESTRICT,
                          model_year int CHECK (model_year BETWEEN 1950 AND extract(year from now())::int + 1),
-  color text,
-  created_at timestamptz NOT NULL DEFAULT now()
+                         color text,
+                         created_at timestamptz NOT NULL DEFAULT now()
 );
 -- CREATE INDEX ix_vehicle_customer ON vehicle(customer_id);
 
