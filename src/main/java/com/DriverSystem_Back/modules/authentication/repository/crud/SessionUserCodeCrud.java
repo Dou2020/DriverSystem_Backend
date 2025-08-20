@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface SessionUserCodeCrud extends JpaRepository<SessionUserCode, String> {
 
+    String code(String code);
+
     @Query(value = "UPDATE user_mfa SET code=?, ts_expired=? WHERE user_id=? ", nativeQuery = true)
     void UpdateSessionUserCode(String newCode, OffsetDateTime tsExpired, long userId);
 

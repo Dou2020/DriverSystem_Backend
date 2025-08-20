@@ -3,10 +3,12 @@ package com.DriverSystem_Back.modules.user;
 import com.DriverSystem_Back.exception.HttpException;
 import com.DriverSystem_Back.modules.Userrole.UserRole;
 import com.DriverSystem_Back.modules.Userrole.UserRoleRepository;
-import com.DriverSystem_Back.modules.user.dto.UserActiveUser;
-import com.DriverSystem_Back.modules.user.dto.UserRequest;
-import com.DriverSystem_Back.modules.user.dto.UserResponse;
-import com.DriverSystem_Back.modules.user.dto.UserSendEmail;
+import com.DriverSystem_Back.modules.authentication.repository.SessionUserCodeRepository;
+import com.DriverSystem_Back.modules.authentication.repository.crud.SessionUserCodeCrud;
+import com.DriverSystem_Back.modules.authentication.repository.entity.SessionUserCode;
+import com.DriverSystem_Back.modules.user.dto.*;
+import com.DriverSystem_Back.modules.users.repository.UsersRepository;
+import com.DriverSystem_Back.modules.users.repository.entities.Users;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,17 +21,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-
 public class UserService implements IUserService {
+
     private UserRepository userRepository;
+    // reset Password
+    private final UsersRepository usersRepository;
+    private final SessionUserCodeRepository sessionUserCodeRepository;
+
     private  ModelMapper modelMapper;
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserRoleRepository userRoleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, UsersRepository usersRepository, SessionUserCodeRepository sessionUserCodeRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.usersRepository = usersRepository;
+        this.sessionUserCodeRepository = sessionUserCodeRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
 
@@ -109,6 +117,34 @@ public class UserService implements IUserService {
         existingUser.setUsaMfa(user.state());
         this.userRepository.save(existingUser);
         return new UserSendEmail(existingUser.getId(), existingUser.getIs_active());
+    }
+
+    @Override
+    public UserResetPassword updatePassword(UserResetPassword user) {
+        Optional<SessionUserCode> userCodeOptional = sessionUserCodeRepository.findByCode(user.code());
+
+        if(userCodeOptional.isEmpty()){
+            throw new HttpException("El codigo es invalido",HttpStatus.NOT_FOUND);
+        }
+
+        SessionUserCode sessionUserCode = userCodeOptional.get();
+
+        if(sessionUserCode.getTsExpired().isBefore(OffsetDateTime.now())){
+            throw new HttpException("El codigo Expiró", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        User existingUser = this.userRepository.findById(sessionUserCode.getUser().getId())
+                .orElseThrow(() ->  new  HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
+
+
+
+
+        return null;
+    }
+
+    @Override
+    public UserCodePassword sendCodePassword(UserCodePassword user) {
+        return null;
     }
 
     public  Optional<User> validateUser(Long id){

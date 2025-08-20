@@ -62,6 +62,11 @@ public class UserController {
         return ResponseEntity.ok().body(newUser);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<?> RegisterUser(@RequestBody @Valid UserRequest body) {
+
+    }
+
 
 
 

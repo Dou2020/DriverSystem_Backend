@@ -1,9 +1,6 @@
 package com.DriverSystem_Back.modules.user;
 
-import com.DriverSystem_Back.modules.user.dto.UserActiveUser;
-import com.DriverSystem_Back.modules.user.dto.UserRequest;
-import com.DriverSystem_Back.modules.user.dto.UserResponse;
-import com.DriverSystem_Back.modules.user.dto.UserSendEmail;
+import com.DriverSystem_Back.modules.user.dto.*;
 
 import java.util.List;
 
@@ -15,4 +12,6 @@ public interface IUserService {
     public List<UserResponse> getAllUsers();
     public UserActiveUser updateActiveUser(UserActiveUser user);
     public UserSendEmail updateSendEmail(UserSendEmail user);
+    public UserResetPassword updatePassword(UserResetPassword user);
+    public UserCodePassword sendCodePassword(UserCodePassword user);
 }

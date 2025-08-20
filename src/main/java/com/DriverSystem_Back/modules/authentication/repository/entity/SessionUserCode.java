@@ -4,18 +4,18 @@ import com.DriverSystem_Back.modules.users.repository.entities.Users;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.*;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 
-@Getter
-@Setter
+@Data
 @Table(name = "user_mfa")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class SessionUserCode {
     @Id
     @Column(name = "code")
