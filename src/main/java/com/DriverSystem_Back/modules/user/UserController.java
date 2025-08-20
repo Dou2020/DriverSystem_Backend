@@ -3,6 +3,7 @@ package com.DriverSystem_Back.modules.user;
 import com.DriverSystem_Back.modules.user.dto.UserActiveUser;
 import com.DriverSystem_Back.modules.user.dto.UserRequest;
 import com.DriverSystem_Back.modules.user.dto.UserResponse;
+import com.DriverSystem_Back.modules.user.dto.UserSendEmail;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,6 +54,12 @@ public class UserController {
     public ResponseEntity<?> updateIsActividad(@RequestBody @Valid UserActiveUser request) {
             UserActiveUser newUser = this.userService.updateActiveUser(request);
             return ResponseEntity.ok().body(newUser);
+    }
+
+    @PutMapping("/state/mfa/{id}")
+    public ResponseEntity<?> updateSendEmail(@RequestBody @Valid UserSendEmail request) {
+        UserSendEmail newUser = this.userService.updateSendEmail(request);
+        return ResponseEntity.ok().body(newUser);
     }
 
 

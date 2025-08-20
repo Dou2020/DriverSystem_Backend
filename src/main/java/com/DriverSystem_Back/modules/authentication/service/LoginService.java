@@ -56,6 +56,10 @@ public class LoginService {
         if (userService.verifyUserPassword(loginDto.getPassword(), userFound.getPasswordHash())){
             Boolean usaMfa = userFound.getUsaMfa();
             String roleCode = null;
+
+            if(!userFound.getIs_active())
+                throw new HttpException("Usuario no activo", HttpStatus.NOT_FOUND);
+
             try {
                 UserRole userRole = userRoleService.findById(userFound.getId());
                 if (userRole != null) {
