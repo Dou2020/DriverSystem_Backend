@@ -114,7 +114,7 @@ public class SessionUserCodeService {
         }
 
         String message = "El codigo es valido";
-        return new ResponseHttpDto(HttpStatus.ACCEPTED.value(), message, roleName, null);
+        return new ResponseHttpDto(HttpStatus.ACCEPTED.value(), message, roleName, null, ""+sessionUserCode.getUser().getId());
     }
 
 }

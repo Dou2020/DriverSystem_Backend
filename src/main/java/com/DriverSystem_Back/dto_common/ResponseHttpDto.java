@@ -5,12 +5,22 @@ public class ResponseHttpDto {
     private String messsage;
     private String role;
     private Boolean usaMfa;
+    private String userId;
 
-    public ResponseHttpDto(Integer codeHttp, String messsage, String role, Boolean usaMfa) {
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public ResponseHttpDto(Integer codeHttp, String messsage, String role, Boolean usaMfa, String userId) {
         this.codeHttp = codeHttp;
         this.messsage = messsage;
         this.role = role;
         this.usaMfa = usaMfa;
+        this.userId = userId;
     }
 
     public Integer getCodeHttp() {
