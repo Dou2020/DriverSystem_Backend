@@ -13,6 +13,6 @@ public interface IUserService {
     public UserActiveUser updateActiveUser(UserActiveUser user);
     public UserSendEmail updateSendEmail(UserSendEmail user);
     public UserResetPassword updatePassword(UserResetPassword user);
-    public UserCodePassword sendCodePassword(UserCodePassword user);
+    public UserSendEmail sendCodePassword(UserSendEmail user);
     public UserResponse  getUserDocType(String docNumer);
 }
