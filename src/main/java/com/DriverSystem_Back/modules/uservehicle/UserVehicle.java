@@ -14,6 +14,8 @@ public class UserVehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long user_id;
-    private Long vehicle_id;
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "vehicle_id")
+    private Long vehicleId;
 }
