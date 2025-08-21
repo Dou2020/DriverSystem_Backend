@@ -1,5 +1,7 @@
 package com.DriverSystem_Back.modules.user;
 
+import com.DriverSystem_Back.modules.role.RoleRepository;
+
 import com.DriverSystem_Back.exception.HttpException;
 import com.DriverSystem_Back.modules.Userrole.UserRole;
 import com.DriverSystem_Back.modules.Userrole.UserRoleRepository;
@@ -34,6 +36,9 @@ public class UserService implements IUserService {
     private UserRoleRepository userRoleRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     public UserService(UserRepository userRepository, UsersRepository usersRepository, SessionUserCodeRepository sessionUserCodeRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.usersRepository = usersRepository;
@@ -49,7 +54,16 @@ public class UserService implements IUserService {
     public UserResponse getUserById(Long id) {
         User user = this.userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return  new UserResponse(user);
+        String roleName = null;
+        var userRoleOpt = userRoleRepository.findFirstByUserId(user.getId());
+        if (userRoleOpt.isPresent()) {
+            var roleId = userRoleOpt.get().getRoleId();
+            var roleOpt = roleRepository.findById(roleId);
+            if (roleOpt.isPresent()) {
+                roleName = roleOpt.get().getName();
+            }
+        }
+        return new com.DriverSystem_Back.modules.user.dto.UserResponse(user, roleName);
     }
 
 
@@ -60,7 +74,14 @@ public class UserService implements IUserService {
         user.setCreated_at(OffsetDateTime.now());
         user.setPasswordHash(passwordEncoder.encode(request.passwordHash()));
         User saved = this.userRepository.save(user);
-        UserResponse response = new UserResponse(saved);
+        String roleName = null;
+        if (request.role() != null) {
+            var roleOpt = roleRepository.findById(request.role());
+            if (roleOpt.isPresent()) {
+                roleName = roleOpt.get().getName();
+            }
+        }
+        UserResponse response = new com.DriverSystem_Back.modules.user.dto.UserResponse(saved, roleName);
         this.userRoleRepository.save(new UserRole(response.id(), request.role()));
         return response;
     }
@@ -72,27 +93,46 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponse updateUser(UserRequest request) {
-            User existingUser = this.userRepository.findById(request.id())
-                    .orElseThrow(() ->  new HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
-            existingUser.setName(request.name());
-            existingUser.setEmail(request.email());
-            existingUser.setUserName(request.userName());
-            existingUser.setPhoneNumber(request.phoneNumber());
-            existingUser.setDocNumber(request.docNumber());
-            existingUser.setDocType(request.docType());
+        User existingUser = this.userRepository.findById(request.id())
+                .orElseThrow(() ->  new HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
+        existingUser.setName(request.name());
+        existingUser.setEmail(request.email());
+        existingUser.setUserName(request.userName());
+        existingUser.setPhoneNumber(request.phoneNumber());
+        existingUser.setDocNumber(request.docNumber());
+        existingUser.setDocType(request.docType());
 
-            if (request.passwordHash() != null && !request.passwordHash().isBlank()) {
-                existingUser.setPasswordHash(passwordEncoder.encode(request.passwordHash()));
+        if (request.passwordHash() != null && !request.passwordHash().isBlank()) {
+            existingUser.setPasswordHash(passwordEncoder.encode(request.passwordHash()));
+        }
+        User saved = this.userRepository.save(existingUser);
+        String roleName = null;
+        var userRoleOpt = userRoleRepository.findFirstByUserId(saved.getId());
+        if (userRoleOpt.isPresent()) {
+            var roleId = userRoleOpt.get().getRoleId();
+            var roleOpt = roleRepository.findById(roleId);
+            if (roleOpt.isPresent()) {
+                roleName = roleOpt.get().getName();
             }
-            User saved = this.userRepository.save(existingUser);
-
-            return new UserResponse(saved);
+        }
+        return new com.DriverSystem_Back.modules.user.dto.UserResponse(saved, roleName);
 
     }
 
     @Override
     public List<UserResponse> getAllUsers() {
-        return this.userRepository.findAll().stream().map(UserResponse::new).toList();
+        return this.userRepository.findAll().stream().map(user -> {
+            String roleName = null;
+            var userRoleOpt = userRoleRepository.findFirstByUserId(user.getId());
+            if (userRoleOpt.isPresent()) {
+                var roleId = userRoleOpt.get().getRoleId();
+                var roleOpt = roleRepository.findById(roleId);
+                if (roleOpt.isPresent()) {
+                    roleName = roleOpt.get().getName();
+                }
+            }
+            return new com.DriverSystem_Back.modules.user.dto.UserResponse(user, roleName);
+        }).toList();
     }
 
 
