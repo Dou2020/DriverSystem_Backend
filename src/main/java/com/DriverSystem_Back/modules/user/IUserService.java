@@ -8,7 +8,7 @@ public interface IUserService {
     public UserResponse getUserById(Long id);
     public UserResponse saveUser(UserRequest user);
     public void deleteUserById(Long id);
-    public UserResponse updateUser(UserRequest user);
+    public UserResponse updateUser(UserUpdateRequest user);
     public List<UserResponse> getAllUsers();
     public UserActiveUser updateActiveUser(UserActiveUser user);
     public UserSendEmail updateSendEmail(UserSendEmail user);

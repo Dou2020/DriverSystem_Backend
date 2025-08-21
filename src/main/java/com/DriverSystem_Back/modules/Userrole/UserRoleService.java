@@ -44,14 +44,19 @@ public class  UserRoleService implements IUserRoleService {
     public UserRole updateRole(UserRoleRequest request) {
         Optional<UserRole> optional = this.userRoleRepository.findFirstByUserId(request.userId());
         if (optional.isEmpty())
-            throw new HttpException("El  usuario no existe", HttpStatus.NOT_FOUND);
+            throw new HttpException("El usuario no existe", HttpStatus.NOT_FOUND);
+
         UserRole existingUserRole = optional.get();
 
-        if (existingUserRole.getRoleId().equals(request.roleId()) ) {
-            throw new HttpException("El  usuario ya tiene el rol asiganado", HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-        existingUserRole.setRoleId (request.roleId());
-        return this.userRoleRepository.save(existingUserRole);
+
+        this.userRoleRepository.delete(existingUserRole);
+
+        UserRole newUserRole = new UserRole();
+        newUserRole.setUserId(request.userId());
+        newUserRole.setRoleId(request.roleId());
+
+        return this.userRoleRepository.save(newUserRole);
     }
+
 
 }

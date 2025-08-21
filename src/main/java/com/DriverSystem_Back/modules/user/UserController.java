@@ -1,9 +1,6 @@
 package com.DriverSystem_Back.modules.user;
 
-import com.DriverSystem_Back.modules.user.dto.UserActiveUser;
-import com.DriverSystem_Back.modules.user.dto.UserRequest;
-import com.DriverSystem_Back.modules.user.dto.UserResponse;
-import com.DriverSystem_Back.modules.user.dto.UserSendEmail;
+import com.DriverSystem_Back.modules.user.dto.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +40,7 @@ public class UserController {
 
 
     @PutMapping("/")
-    public ResponseEntity<?> updateUser(@RequestBody @Valid UserRequest request) {
+    public ResponseEntity<?> updateUser(@RequestBody @Valid UserUpdateRequest request) {
             UserResponse newUser = this.userService.updateUser(request);
             return ResponseEntity.ok().body(newUser);
 
