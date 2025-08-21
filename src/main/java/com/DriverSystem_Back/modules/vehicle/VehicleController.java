@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/vehicle")
 @AllArgsConstructor
@@ -31,7 +33,9 @@ public class VehicleController {
         return ResponseEntity.ok().build();
     }
 
-
-
+   @GetMapping("/")
+    public ResponseEntity<List<VehicleResponse>> findAllVehicle() {
+        return ResponseEntity.ok(this.vehicleService.findAllVehicle());
+   }
 
 }

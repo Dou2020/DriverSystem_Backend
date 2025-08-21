@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,6 +47,11 @@ public class VehicleService implements IVehicleService {
     @Override
     public VehicleResponse updateVehicle(VehicleRequest request) {
         return null;
+    }
+
+    @Override
+    public List<VehicleResponse> findAllVehicle() {
+        return this.vehicleResponseRepository.findAll();
     }
 
     public  Optional<Vehicle> validationVehicle(Long idVehicle){
