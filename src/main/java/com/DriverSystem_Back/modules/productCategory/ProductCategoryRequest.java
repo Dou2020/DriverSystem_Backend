@@ -1,8 +1,0 @@
-package com.DriverSystem_Back.modules.productCategory;
-
-import jakarta.validation.constraints.NotBlank;
-
-public record ProductCategoryRequest(
-        @NotBlank String name
-) {
-}

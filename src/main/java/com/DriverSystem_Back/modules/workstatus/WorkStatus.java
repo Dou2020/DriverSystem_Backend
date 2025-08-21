@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.modules.productCategory;
+package com.DriverSystem_Back.modules.workstatus;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,16 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Table(name ="work_status")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product_category")
-
-public class ProductCategory  {
+public class WorkStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
+    private String  name;
+    private String  code;
 }
