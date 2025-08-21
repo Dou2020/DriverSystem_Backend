@@ -95,12 +95,18 @@ public class UserService implements IUserService {
     public UserResponse updateUser(UserRequest request) {
         User existingUser = this.userRepository.findById(request.id())
                 .orElseThrow(() ->  new HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
-        existingUser.setName(request.name());
-        existingUser.setEmail(request.email());
-        existingUser.setUserName(request.userName());
-        existingUser.setPhoneNumber(request.phoneNumber());
-        existingUser.setDocNumber(request.docNumber());
-        existingUser.setDocType(request.docType());
+        if ( request.name() != null && !request.name().equals(existingUser.getUserName()))
+            existingUser.setName(request.name());
+        if ( request.email().isBlank() && !request.email().equals(existingUser.getEmail()))
+            existingUser.setEmail(request.email());
+        if ( request.userName().isBlank() && !request.userName().equals(existingUser.getUserName()))
+            existingUser.setUserName(request.userName());
+        if ( request.phoneNumber().isBlank() && !request.phoneNumber().equals(existingUser.getPhoneNumber()))
+            existingUser.setPhoneNumber(request.phoneNumber());
+        if ( request.docNumber().isBlank() && !request.docNumber().equals(existingUser.getDocNumber()))
+            existingUser.setDocNumber(request.docNumber());
+        if ( request.docType().isBlank() && !request.docType().equals(existingUser.getDocType()))
+            existingUser.setDocType(request.docType());
 
         if (request.passwordHash() != null && !request.passwordHash().isBlank()) {
             existingUser.setPasswordHash(passwordEncoder.encode(request.passwordHash()));
