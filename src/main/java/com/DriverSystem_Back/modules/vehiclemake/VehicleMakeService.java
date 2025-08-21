@@ -39,7 +39,7 @@ public class VehicleMakeService implements IVehicleMakeService{
             throw new HttpException("La marca no existe!", HttpStatus.NOT_FOUND);
 
         VehicleMake vehicleMake = optional.get();
-        vehicleMake.setName(vehicleMake.getName());
+        vehicleMake.setName(request.name());
         return this.vehicleMakeRepository.save(vehicleMake);
     }
 
