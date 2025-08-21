@@ -16,7 +16,6 @@ import java.util.List;
 @Service
 @RestController
 @RequestMapping("api/user")
-
 public class UserController {
     @Autowired
     private  IUserService userService;
@@ -61,6 +60,11 @@ public class UserController {
         UserSendEmail newUser = this.userService.updateSendEmail(request);
         return ResponseEntity.ok().body(newUser);
     }
+
+    //@PostMapping("/register")
+    //public ResponseEntity<?> RegisterUser(@RequestBody @Valid UserRequest body) {
+    //    return null;
+    //}
 
 
 

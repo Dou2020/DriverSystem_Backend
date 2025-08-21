@@ -19,22 +19,28 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true, nullable = false, name = "username")
     private String userName;
+
     @Email
     @Column(unique = true, nullable = false)
     private String email;
     @Column(name = "phone")
+
     private String phoneNumber;
     @Column(name = "password_hash")
     private String passwordHash;
 
+    @Column(name = "is_active")
     private Boolean is_active;
+
     @Column(name = "user_type")
     private String userType;
 
     @Column(name = "doc_type")
     private String docType;
+
     @Column(name = "doc_number")
     private String docNumber;
     private String name;
