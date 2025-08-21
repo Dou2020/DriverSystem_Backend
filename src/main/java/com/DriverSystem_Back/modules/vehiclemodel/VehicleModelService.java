@@ -53,7 +53,7 @@ public class VehicleModelService  implements  IVehicleModelService{
             throw  new HttpException("No existe la marca!", HttpStatus.NOT_FOUND);
 
         vehicleModelUpdate.setName(vehicleModel.name());
-        vehicleModelUpdate.setMakeId(vehicleModel.id());
+        vehicleModelUpdate.setMakeId(vehicleModel.makeId());
         return   this.vehicleRepository.save(vehicleModelUpdate);
     }
 
