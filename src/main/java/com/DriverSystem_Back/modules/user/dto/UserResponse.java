@@ -12,15 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.OffsetDateTime;
 
 
-public record UserResponse(Long id, String userName, String email, String phoneNumber, String docType, String docNumber, String name, String userType, OffsetDateTime createdAt,Boolean is_active, Boolean is_active_mfa) {
+public record UserResponse(Long id, String userName, String email, String phoneNumber, String docType, String docNumber, String name, String userType, OffsetDateTime createdAt,Boolean is_active, Boolean is_active_mfa, String roleName) {
 
   //@Autowired
   //private static final RoleService roleService;
   //private static final UserRoleService userRoleService = new UserRoleService();
 
 
-  public UserResponse(User user) {
-
+  public UserResponse(User user, String roleName) {
     this(
             user.getId(),
             user.getUserName(),
@@ -32,8 +31,8 @@ public record UserResponse(Long id, String userName, String email, String phoneN
             user.getUserType(),
             user.getCreated_at(),
             user.getIs_active(),
-            user.getUsaMfa()
-            //roleService.getRoleById(userRoleService.findById(user.getId()).getRoleId()).name()
+            user.getUsaMfa(),
+            roleName
     );
   }
 }
