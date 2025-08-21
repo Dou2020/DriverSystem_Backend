@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 
 public record WorkOrderRequest(
         Long id,
-        String code,
+      //  String code,
         @ExistsValue(entityClass = Vehicle.class, fieldName = "id", message = "vehicle no existe")
         @NotNull
         Long vehicleId,

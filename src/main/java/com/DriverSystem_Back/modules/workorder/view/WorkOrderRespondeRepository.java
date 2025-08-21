@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface WorkOrderRespondeRepository extends JpaRepository<WorkOrderResponde, Long> {
     List<WorkOrderResponde> findByStatus(String id);
+
 }

@@ -212,4 +212,21 @@ public class UserService implements IUserService {
         return optional;
     }
 
+    @Override
+    public UserResponse  getUserDocType(String docNumer){
+        User user = this.userRepository.findByDocNumber(docNumer)
+                .orElseThrow(() -> new HttpException("Usuario no encontrado!!", HttpStatus.NOT_FOUND));
+        String roleName = null;
+        var userRoleOpt = userRoleRepository.findFirstByUserId(user.getId());
+        if (userRoleOpt.isPresent()) {
+            var roleId = userRoleOpt.get().getRoleId();
+            var roleOpt = roleRepository.findById(roleId);
+            if (roleOpt.isPresent()) {
+                roleName = roleOpt.get().getName();
+            }
+        }
+        return new com.DriverSystem_Back.modules.user.dto.UserResponse(user, roleName);
+
+    }
+
 }

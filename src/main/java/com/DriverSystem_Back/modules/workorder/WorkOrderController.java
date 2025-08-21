@@ -1,6 +1,9 @@
 package com.DriverSystem_Back.modules.workorder;
 
+import com.DriverSystem_Back.modules.uservehicle.UserVehicle;
+import com.DriverSystem_Back.modules.uservehicle.dto.UserVehicleRequest;
 import com.DriverSystem_Back.modules.workorder.dto.WorkOrderRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +41,18 @@ public class WorkOrderController {
     public ResponseEntity<?> getWorkOrder(){
         return ResponseEntity.ok(this.workOrderServidor.getWorkOrder());
     }
+
+    @Operation(summary = "Obtener  las  ordenes por estado", description = "Devuelve las ordenes de trabajo según el estado selecionado")
     @GetMapping("/status/{statusId}")
     public ResponseEntity<?> getWorkOrderStatus(@PathVariable Long statusId){
         return ResponseEntity.ok(this.workOrderServidor.findBystatus(statusId));
     }
+    @Operation(summary = "Obtener  las  ordenes por  vehiculo y cliente", description = "Devuelve las ordenes de trabajo según el número de placa")
+
+    @PostMapping("/user")
+    public ResponseEntity<?> getWorkOrderPlate(@RequestBody @Valid UserVehicleRequest request){
+        return  ResponseEntity.ok(this.workOrderServidor.workOrderVehicle(request));
+    }
 
 }
+

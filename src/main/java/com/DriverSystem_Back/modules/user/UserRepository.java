@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUserNameAndIdNot(@NotBlank(message = "El nombre de usuario es obligatorio") String s, Long id);
 
     boolean existsByPhoneNumberAndIdNot(@NotBlank(message = "El número de teléfono es obligatorio") String s, Long id);
+
+    Optional<User> findByDocNumber(String  docNumber);
 }

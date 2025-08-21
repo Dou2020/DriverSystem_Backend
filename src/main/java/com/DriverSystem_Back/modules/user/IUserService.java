@@ -14,4 +14,5 @@ public interface IUserService {
     public UserSendEmail updateSendEmail(UserSendEmail user);
     public UserResetPassword updatePassword(UserResetPassword user);
     public UserCodePassword sendCodePassword(UserCodePassword user);
+    public UserResponse  getUserDocType(String docNumer);
 }

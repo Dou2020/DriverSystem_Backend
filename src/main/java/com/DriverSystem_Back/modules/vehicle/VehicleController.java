@@ -21,9 +21,9 @@ public class VehicleController {
         return ResponseEntity.ok(vehicle);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getVehicles( @PathVariable String id) {
-        VehicleResponse vehicle = this.vehicleService.getVehicle(id);
+    @GetMapping("/{plate}")
+    public ResponseEntity<?> getVehicles( @PathVariable String plate) {
+        VehicleResponse vehicle = this.vehicleService.getVehicle(plate);
         return ResponseEntity.ok(vehicle);
     }
 
@@ -36,6 +36,10 @@ public class VehicleController {
    @GetMapping("/")
     public ResponseEntity<List<VehicleResponse>> findAllVehicle() {
         return ResponseEntity.ok(this.vehicleService.findAllVehicle());
+   }
+   @PutMapping("/")
+    public ResponseEntity<?> updateVehicle(@Valid @RequestBody VehicleRequest vehicleRequest) {
+        return  ResponseEntity.ok(this.vehicleService.updateVehicle(vehicleRequest));
    }
 
 }

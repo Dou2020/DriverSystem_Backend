@@ -63,6 +63,10 @@ public class UserController {
     //    return null;
     //}
 
+    @GetMapping("/docNumer/{id}")
+    public ResponseEntity<?> getUserDocNumer(@PathVariable String id){
+        return ResponseEntity.ok(this.userService.getUserDocType(id));
+    }
 
 
 

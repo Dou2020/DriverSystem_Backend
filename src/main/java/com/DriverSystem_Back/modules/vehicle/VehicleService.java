@@ -6,6 +6,7 @@ import com.DriverSystem_Back.modules.vehicle.view.VehicleResponse;
 import com.DriverSystem_Back.modules.vehicle.view.VehicleResponseRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,20 @@ public class VehicleService implements IVehicleService {
 
     @Override
     public VehicleResponse updateVehicle(VehicleRequest request) {
-        return null;
+       Vehicle  vehicle1=  this.validationVehicle(request.id()).get();
+        vehicle1.setVin(request.vin());
+        vehicle1.setPlate(request.plate());
+        vehicle1.setMakeId(request.makeId());
+        vehicle1.setModelId(request.modelId());
+        vehicle1.setModelYear(request.modelYear());
+        vehicle1.setColor(request.color());
+        try {
+            vehicleRepository.save(vehicle1);
+        } catch (DataIntegrityViolationException e) {
+            throw new HttpException(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        VehicleResponse vehicle2 = this.vehicleResponseRepository.findById(request.id()).get();
+        return  vehicle2;
     }
 
     @Override
