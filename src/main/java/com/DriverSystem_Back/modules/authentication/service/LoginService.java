@@ -82,9 +82,9 @@ public class LoginService {
                 sessionUserCodeDto.setUserId(userFound.getId());
                 sessionUserCodeDto.setTsExpired(createExpirationDate());
                 userCodeService.updateOrSaveSessionCode(sessionUserCodeDto);
-                return new ResponseHttpDto(HttpStatus.OK.value(), "Se ha enviado un código al correo registrado", roleCode, usaMfa);
+                return new ResponseHttpDto(HttpStatus.OK.value(), "Se ha enviado un código al correo registrado", roleCode, usaMfa, ""+userFound.getId());
             } else {
-                return new ResponseHttpDto(HttpStatus.OK.value(), "Login exitoso", roleCode, usaMfa);
+                return new ResponseHttpDto(HttpStatus.OK.value(), "Login exitoso", roleCode, usaMfa, ""+userFound.getId());
             }
         }else {
             throw new HttpException("Las credenciales del usuario son Incorrectas", HttpStatus.NOT_FOUND);

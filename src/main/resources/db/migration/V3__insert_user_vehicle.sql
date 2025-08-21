@@ -33,7 +33,7 @@ INSERT INTO vehicle_make (name) VALUES
 INSERT INTO vehicle_model (make_id, name) VALUES
                                               (1, 'Corolla'),
                                               (1, 'Hilux'),
-                                              (2, 'Civic'),
+                                                  (2, 'Civic'),
                                               (2, 'CR-V'),
                                               (3, 'Sentra'),
                                               (3, 'Navara');
