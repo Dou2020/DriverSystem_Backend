@@ -1,5 +1,8 @@
 package com.DriverSystem_Back.modules.product;
 
+import com.DriverSystem_Back.modules.product.dto.ProductPatchRequest;
+import com.DriverSystem_Back.modules.product.dto.ProductRequest;
+import com.DriverSystem_Back.modules.product.dto.ProductResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

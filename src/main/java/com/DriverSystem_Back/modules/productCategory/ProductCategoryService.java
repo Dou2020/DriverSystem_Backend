@@ -1,7 +1,8 @@
 package com.DriverSystem_Back.modules.productCategory;
 
 import com.DriverSystem_Back.exception.HttpException;
-import com.DriverSystem_Back.modules.role.Role;
+import com.DriverSystem_Back.modules.productCategory.dto.ProductCategoryRequest;
+import com.DriverSystem_Back.modules.productCategory.dto.ProductCategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

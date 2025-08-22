@@ -1,4 +1,4 @@
-package com.DriverSystem_Back.modules.product;
+package com.DriverSystem_Back.modules.product.dto;
 
 import lombok.Data;
 import java.math.BigDecimal;

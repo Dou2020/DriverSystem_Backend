@@ -1,7 +1,6 @@
-package com.DriverSystem_Back.modules.product;
+package com.DriverSystem_Back.modules.product.dto;
 
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
