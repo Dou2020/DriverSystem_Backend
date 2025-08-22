@@ -31,6 +31,7 @@ public record WorkOrderRequest(
         OffsetDateTime closedAt,
         @NotNull
         @ExistsValue(entityClass = User.class, fieldName = "id", message = "customer no existe")
-        Long createdBy
+        Long createdBy,
+        Long visitId
 ) {
 }

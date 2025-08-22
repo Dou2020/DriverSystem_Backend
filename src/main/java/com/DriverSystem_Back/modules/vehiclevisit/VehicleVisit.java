@@ -27,4 +27,8 @@ public class VehicleVisit {
     @Column(name="departed_at")
     private OffsetDateTime departureAt;
     private String notes;
+    
+    @Column(name = "status")
+    @Builder.Default
+    private String status = "NUEVA";
 }

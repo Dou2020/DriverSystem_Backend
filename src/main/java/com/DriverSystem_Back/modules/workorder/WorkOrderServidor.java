@@ -3,6 +3,8 @@ package com.DriverSystem_Back.modules.workorder;
 import com.DriverSystem_Back.exception.HttpException;
 import com.DriverSystem_Back.modules.user.User;
 import com.DriverSystem_Back.modules.uservehicle.dto.UserVehicleRequest;
+import com.DriverSystem_Back.modules.vehiclevisit.VehicleVisit;
+import com.DriverSystem_Back.modules.vehiclevisit.VehicleVisitRepository;
 import com.DriverSystem_Back.modules.workorder.dto.WorkOrderRequest;
 import com.DriverSystem_Back.modules.workorder.view.WorkOrderResponde;
 import com.DriverSystem_Back.modules.workorder.view.WorkOrderRespondeRepository;
@@ -27,12 +29,37 @@ public class WorkOrderServidor implements IWorkOrderService {
     private ModelMapper modelMapper;
     @Autowired
     private WorkStatusRepository  workStatusRepository;
+    @Autowired
+    private VehicleVisitRepository vehicleVisitRepository;
     @Override
     public WorkOrderResponde save(WorkOrderRequest request) {
         WorkOrder workOrderEntity = modelMapper.map(request, WorkOrder.class);
         workOrderEntity.setClosedAt(null);
-        var id=  this.workOrderRepository.save(workOrderEntity).getId();
-       return this.workOrderRespondeRepository.findById(id).get();
+        
+        // Asignar automáticamente un visitId basado en el vehículo y cliente
+        Long visitId = getOrCreateActiveVisit(request.vehicleId(), request.customerId());
+        workOrderEntity.setVisitId(visitId);
+        
+        var id = this.workOrderRepository.save(workOrderEntity).getId();
+        return this.workOrderRespondeRepository.findById(id).get();
+    }
+    
+    /**
+     * Obtiene una visita activa para el vehículo y cliente, o devuelve null si no existe
+     * En un escenario real, podrías crear automáticamente una nueva visita si no existe una activa
+     */
+    private Long getOrCreateActiveVisit(Long vehicleId, Long customerId) {
+        // Buscar una visita activa (sin fecha de salida) para este vehículo y cliente
+        Optional<VehicleVisit> activeVisit = vehicleVisitRepository
+            .findByVehicleIdAndCustomerIdAndDepartureAtIsNull(vehicleId, customerId);
+        
+        if (activeVisit.isPresent()) {
+            return activeVisit.get().getId();
+        }
+        
+        // Si no hay visita activa, podríamos crear una nueva automáticamente
+        // o devolver null y manejar esto según la lógica del negocio
+        return null; // Por ahora devolvemos null si no hay visita activa
     }
 
     @Override
@@ -48,6 +75,12 @@ public class WorkOrderServidor implements IWorkOrderService {
         workOrder.setEstimatedHours(request.estimatedHours());
         workOrder.setClosedAt(request.closedAt());
         workOrder.setCreatedBy(request.createdBy());
+        
+        // Actualizar visitId si viene en el request
+        if (request.visitId() != null) {
+            workOrder.setVisitId(request.visitId());
+        }
+        
         var id = this.workOrderRepository.save(workOrder).getId();
         return this.workOrderRespondeRepository.findById(id).get();
     }

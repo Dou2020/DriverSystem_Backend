@@ -12,4 +12,5 @@ public interface IVehicleService {
     public void deleteVehicle(Long idVehicle);
     public VehicleResponse updateVehicle( VehicleRequest vehicle);
     public List<VehicleResponse> findAllVehicle();
+    public List<VehicleResponse> findUnassignedVehicles();
 }

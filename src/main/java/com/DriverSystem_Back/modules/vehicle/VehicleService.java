@@ -1,6 +1,9 @@
 package com.DriverSystem_Back.modules.vehicle;
 
 import com.DriverSystem_Back.exception.HttpException;
+import com.DriverSystem_Back.modules.vehiclevisit.VehicleVisit;
+import com.DriverSystem_Back.modules.vehiclevisit.VehicleVisitRepository;
+import com.DriverSystem_Back.modules.vehicle.dto.VehicleCreateRequest;
 import com.DriverSystem_Back.modules.vehicle.dto.VehicleRequest;
 import com.DriverSystem_Back.modules.vehicle.view.VehicleResponse;
 import com.DriverSystem_Back.modules.vehicle.view.VehicleResponseRepository;
@@ -10,6 +13,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +27,8 @@ public class VehicleService implements IVehicleService {
      private ModelMapper modelMapper;
      @Autowired
      private VehicleResponseRepository vehicleResponseRepository;
+     @Autowired
+     private VehicleVisitRepository vehicleVisitRepository;
 
     @Override
     public VehicleResponse getVehicle(String plate) {
@@ -36,7 +43,38 @@ public class VehicleService implements IVehicleService {
             throw  new HttpException("El vehicula ya esta registrado",HttpStatus.UNPROCESSABLE_ENTITY);
         Vehicle vehicle2= this.modelMapper.map(request, Vehicle.class);
         Vehicle  vehicle =this.vehicleRepository.save(vehicle2);
-        return this.vehicleResponseRepository.getReferenceById(vehicle.getId());
+        return this.vehicleResponseRepository.findById(vehicle.getId())
+                .orElseThrow(() -> new HttpException("Error al recuperar el vehículo creado", HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
+    public VehicleResponse createVehicle(VehicleCreateRequest request) {
+        Optional<Vehicle> existingVehicle = this.vehicleRepository.findByPlate(request.plate());
+        if(existingVehicle.isPresent())
+            throw  new HttpException("El vehículo ya está registrado", HttpStatus.UNPROCESSABLE_ENTITY);
+        
+        // Crear nueva instancia de Vehicle sin ID
+        Vehicle vehicle = new Vehicle();
+        vehicle.setVin(request.vin());
+        vehicle.setPlate(request.plate());
+        vehicle.setMakeId(request.makeId());
+        vehicle.setModelId(request.modelId());
+        vehicle.setColor(request.color());
+        vehicle.setModelYear(request.modelYear());
+        
+        Vehicle savedVehicle = this.vehicleRepository.save(vehicle);
+        
+        // Crear automáticamente una VehicleVisit
+        VehicleVisit vehicleVisit = new VehicleVisit();
+        vehicleVisit.setVehicleId(savedVehicle.getId());
+        vehicleVisit.setCustomerId(request.customerId());
+        vehicleVisit.setArrivedAt(OffsetDateTime.now(ZoneOffset.of("-06:00")));
+        vehicleVisit.setStatus("NUEVA");
+        vehicleVisit.setNotes("Visita creada automáticamente al registrar el vehículo");
+        
+        this.vehicleVisitRepository.save(vehicleVisit);
+        
+        return this.vehicleResponseRepository.findById(savedVehicle.getId())
+                .orElseThrow(() -> new HttpException("Error al recuperar el vehículo creado", HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     @Override
@@ -66,6 +104,10 @@ public class VehicleService implements IVehicleService {
     @Override
     public List<VehicleResponse> findAllVehicle() {
         return this.vehicleResponseRepository.findAll();
+    }
+
+    public List<VehicleResponse> findUnassignedVehicles() {
+        return this.vehicleResponseRepository.findUnassignedVehicles();
     }
 
     public  Optional<Vehicle> validationVehicle(Long idVehicle){
