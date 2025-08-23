@@ -80,6 +80,12 @@ public class UserController {
     }
 
 
+    @GetMapping("/Availability")
+    public ResponseEntity<?> getEmployeeAvailability(){
+        return ResponseEntity.ok(this.userService.getEmployee());
+    }
+
+
 
 
 

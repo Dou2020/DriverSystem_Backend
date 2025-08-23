@@ -6,6 +6,7 @@ import com.DriverSystem_Back.modules.uservehicle.dto.UserVehicleRequest;
 import com.DriverSystem_Back.modules.vehiclevisit.VehicleVisit;
 import com.DriverSystem_Back.modules.vehiclevisit.VehicleVisitRepository;
 import com.DriverSystem_Back.modules.workorder.dto.WorkOrderRequest;
+import com.DriverSystem_Back.modules.workorder.dto.WorkOrderUserStateRequest;
 import com.DriverSystem_Back.modules.workorder.view.WorkOrderResponde;
 import com.DriverSystem_Back.modules.workorder.view.WorkOrderRespondeRepository;
 import com.DriverSystem_Back.modules.workstatus.WorkStatus;
@@ -119,6 +120,19 @@ public class WorkOrderServidor implements IWorkOrderService {
         }
         return workOrderRespondes;
     }
+
+    /* si se quisiera filtar por usuario y estado  las ordenes seria agregar aca el id del estado*/
+    @Override
+    public List<WorkOrderResponde> workOrderUserId(WorkOrderUserStateRequest request) {
+        List<WorkOrder> list = workOrderRepository.findByCustomerIdAndStatusType((request.userId()), request.statusId());
+        List<WorkOrderResponde> workOrderRespondes = new ArrayList<>();
+        for(WorkOrder workOrder : list){
+            workOrderRespondes.add(this.workOrderRespondeRepository.findById(workOrder.getId()).get());
+        }
+        return workOrderRespondes;
+    }
+
+
 
 
 }

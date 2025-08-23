@@ -23,16 +23,13 @@ public class WorkOrderResponde {
     private BigDecimal estimatedHours;
     private OffsetDateTime openedAt;
     private OffsetDateTime closedAt;
-
     private String maintenanceType;
     private String status;
-
+    private Long  customerId;
     private String docNumberCustomer;
     private String customer;
     private String phoneCustomer;
-
     private String createdBy;
-
     private String vin;
     private String plate;
     private String model;
