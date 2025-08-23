@@ -207,7 +207,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserCodePassword sendCodePassword(UserCodePassword user) {
+    public UserSendEmail sendCodePassword(UserSendEmail user) {
         return null;
     }
 

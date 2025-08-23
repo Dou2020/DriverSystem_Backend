@@ -58,6 +58,17 @@ public class UserController {
         return ResponseEntity.ok().body(newUser);
     }
 
+    @PostMapping("/reset/password")
+    public ResponseEntity<?> updatePassword(@RequestBody @Valid UserResetPassword request){
+        UserResetPassword user = this.userService.updatePassword(request);
+        return ResponseEntity.ok().body(user);
+    }
+    @PostMapping("/reset/code")
+    public ResponseEntity<?> sendCodePassword(@RequestBody @Valid UserSendEmail request){
+        UserSendEmail user = this.userService.sendCodePassword(request);
+        return ResponseEntity.ok().body(user);
+    }
+
     //@PostMapping("/register")
     //public ResponseEntity<?> RegisterUser(@RequestBody @Valid UserRequest body) {
     //    return null;

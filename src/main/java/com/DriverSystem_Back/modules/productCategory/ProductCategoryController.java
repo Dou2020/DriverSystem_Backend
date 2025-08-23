@@ -1,5 +1,7 @@
 package com.DriverSystem_Back.modules.productCategory;
 
+import com.DriverSystem_Back.modules.productCategory.dto.ProductCategoryRequest;
+import com.DriverSystem_Back.modules.productCategory.dto.ProductCategoryResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
