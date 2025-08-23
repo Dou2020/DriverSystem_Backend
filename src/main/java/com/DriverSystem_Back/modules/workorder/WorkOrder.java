@@ -34,5 +34,7 @@ public class WorkOrder {
     private OffsetDateTime closedAt;
     @Column(name = "created_by")
     private Long createdBy;
+    @Column(name = "visit_id")
+    private Long visitId;
 
 }

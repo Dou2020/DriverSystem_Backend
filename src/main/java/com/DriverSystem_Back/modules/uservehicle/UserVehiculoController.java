@@ -23,7 +23,7 @@ public class UserVehiculoController {
     public ResponseEntity<?> saveVehicle(@RequestBody @Valid UserVehicleRequest request){
         return ResponseEntity.ok(  this.userVehicleService.saveUserVehicle(request));
     }
-    @GetMapping("{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<List<UserVehicleResponde>> findAllVehicleByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(this.userVehicleService.getAllVehicles(userId));
     }
