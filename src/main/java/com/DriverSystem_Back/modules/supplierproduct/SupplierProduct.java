@@ -1,5 +1,7 @@
 package com.DriverSystem_Back.modules.supplierproduct;
 
+import com.DriverSystem_Back.modules.product.Product;
+import com.DriverSystem_Back.modules.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +16,13 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SupplierProduct {
+
+    public SupplierProduct(Long supplierId, Long productId, Integer stockQuantity, Integer leadTimeDays) {
+        this.supplierId = supplierId;
+        this.productId = productId;
+        this.stockQuantity = stockQuantity;
+        this.leadTimeDays = leadTimeDays;
+    }
 
     @Id
     @NotNull(message = "El ID del proveedor no puede ser nulo")
@@ -32,4 +41,14 @@ public class SupplierProduct {
     @Min(value = 0, message = "El tiempo de entrega no puede ser negativo")
     @Column(name = "lead_time_days")
     private Integer leadTimeDays;
+
+    // Relación con User (proveedor)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private User supplier;
+
+    // Relación con Product
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Product product;
 }

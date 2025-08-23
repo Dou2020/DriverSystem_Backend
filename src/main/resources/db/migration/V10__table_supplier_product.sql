@@ -6,3 +6,9 @@ CREATE TABLE supplier_product (
   lead_time_days INT CHECK (lead_time_days >= 0),
   PRIMARY KEY (supplier_id, product_id)
 );
+
+INSERT INTO supplier_product (supplier_id, product_id, stock_quantity, lead_time_days)
+VALUES
+  (5, 1, 15, 2),  -- 15 alternadores en stock, entrega en 2 días
+  (5, 2, 5, 5);   -- sin stock de frenos, pero puede entregar en 5 días
+

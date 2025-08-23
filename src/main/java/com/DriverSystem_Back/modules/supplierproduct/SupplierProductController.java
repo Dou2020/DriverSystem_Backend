@@ -18,8 +18,8 @@ public class SupplierProductController {
     @GetMapping
     public List<SupplierProductResponse> getAll() {
         return service.findAll().stream()
-            .map(service::toResponseDTO)
-            .collect(Collectors.toList());
+                .map(service::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{supplierId}/{productId}")
@@ -30,7 +30,7 @@ public class SupplierProductController {
     }
 
     @GetMapping("/supplier/{supplierId}")
-    public List<SupplierProductResponse> getProductsBySupplier(@PathVariable Long supplierId) {
+    public List<SupplierProductResponse> getBySupplier(@PathVariable Long supplierId) {
         return service.findBySupplierId(supplierId).stream()
                 .map(service::toResponseDTO)
                 .collect(Collectors.toList());

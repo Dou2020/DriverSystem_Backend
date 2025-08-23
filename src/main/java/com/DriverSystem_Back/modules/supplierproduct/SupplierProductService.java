@@ -54,15 +54,17 @@ public class SupplierProductService {
     public SupplierProductResponse toResponseDTO(SupplierProduct entity) {
         SupplierProductResponse dto = new SupplierProductResponse();
         dto.setSupplierId(entity.getSupplierId());
+        dto.setSupplierName(entity.getSupplier() != null ? entity.getSupplier().getName() : null);
+        dto.setSupplierEmail(entity.getSupplier() != null ? entity.getSupplier().getEmail() : null);
         dto.setProductId(entity.getProductId());
+        dto.setProductName(entity.getProduct() != null ? entity.getProduct().getName() : null);
+        dto.setProductDescription(entity.getProduct() != null ? entity.getProduct().getBrand() : null);
         dto.setStockQuantity(entity.getStockQuantity());
         dto.setLeadTimeDays(entity.getLeadTimeDays());
         return dto;
     }
 
     public List<SupplierProduct> findBySupplierId(Long supplierId) {
-        return repository.findAll().stream()
-                .filter(sp -> sp.getSupplierId().equals(supplierId))
-                .collect(Collectors.toList());
+        return repository.findBySupplierId(supplierId);
     }
 }
