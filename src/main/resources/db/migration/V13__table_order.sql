@@ -21,3 +21,21 @@ CREATE TABLE purchase_order_item (
   tax_rate  numeric(5,2) NOT NULL DEFAULT 12.00,
   UNIQUE (purchase_order_id, product_id)
 );
+
+-- Inserts para purchase_order
+INSERT INTO purchase_order (id, code, supplier_id, status, ordered_at, expected_at, currency, notes)
+VALUES (1, 'PO-2024-0001', 2, 'DRAFT', '2024-06-10 10:00:00+00', '2024-06-20', 'GTQ', 'Primera orden de ejemplo');
+
+INSERT INTO purchase_order (id, code, supplier_id, status, ordered_at, expected_at, currency, notes)
+VALUES (2, 'PO-2024-0002', 3, 'SENT', '2024-06-11 11:00:00+00', '2024-06-22', 'GTQ', 'Segunda orden de ejemplo');
+
+-- Inserts para purchase_order_item
+INSERT INTO purchase_order_item (id, purchase_order_id, product_id, quantity, unit_cost, discount, tax_rate)
+VALUES (1, 1, 5, 10.000, 50.0000, 0, 12.00);
+
+INSERT INTO purchase_order_item (id, purchase_order_id, product_id, quantity, unit_cost, discount, tax_rate)
+VALUES (2, 1, 6, 5.000, 100.0000, 10.0000, 12.00);
+
+INSERT INTO purchase_order_item (id, purchase_order_id, product_id, quantity, unit_cost, discount, tax_rate)
+VALUES (3, 2, 7, 2.000, 200.0000, 0, 12.00);
+
