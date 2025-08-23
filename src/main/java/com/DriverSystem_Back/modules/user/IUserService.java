@@ -1,6 +1,7 @@
 package com.DriverSystem_Back.modules.user;
 
 import com.DriverSystem_Back.modules.user.dto.*;
+import com.DriverSystem_Back.modules.user.useravailability.Availability;
 
 import java.util.List;
 
@@ -15,4 +16,7 @@ public interface IUserService {
     public UserResetPassword updatePassword(UserResetPassword user);
     public UserCodePassword sendCodePassword(UserCodePassword user);
     public UserResponse  getUserDocType(String docNumer);
+    // lista de empleado disponbiles
+    public List<Availability> getEmployee();
+
 }

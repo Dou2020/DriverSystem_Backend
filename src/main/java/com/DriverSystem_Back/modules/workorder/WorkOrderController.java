@@ -3,6 +3,7 @@ package com.DriverSystem_Back.modules.workorder;
 import com.DriverSystem_Back.modules.uservehicle.UserVehicle;
 import com.DriverSystem_Back.modules.uservehicle.dto.UserVehicleRequest;
 import com.DriverSystem_Back.modules.workorder.dto.WorkOrderRequest;
+import com.DriverSystem_Back.modules.workorder.dto.WorkOrderUserStateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -54,5 +55,11 @@ public class WorkOrderController {
         return  ResponseEntity.ok(this.workOrderServidor.workOrderVehicle(request));
     }
 
+
+    @Operation(summary = "Obtener  las  ordenes por  el id del cliente y stato de orden", description = "Devuelve un lista de ordenes con  el id ")
+    @PostMapping("/view")
+    public ResponseEntity<?> getWorkOrderUserId(@RequestBody @Valid WorkOrderUserStateRequest request){
+        return   ResponseEntity.ok(this.workOrderServidor.workOrderUserId(request));
+    }
 }
 

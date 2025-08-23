@@ -11,8 +11,11 @@ import com.DriverSystem_Back.modules.authentication.repository.SessionUserCodeRe
 import com.DriverSystem_Back.modules.authentication.repository.crud.SessionUserCodeCrud;
 import com.DriverSystem_Back.modules.authentication.repository.entity.SessionUserCode;
 import com.DriverSystem_Back.modules.user.dto.*;
+import com.DriverSystem_Back.modules.user.useravailability.Availability;
+import com.DriverSystem_Back.modules.user.useravailability.AvailabilityRepository;
 import com.DriverSystem_Back.modules.users.repository.UsersRepository;
 import com.DriverSystem_Back.modules.users.repository.entities.Users;
+import io.swagger.v3.oas.annotations.Operation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,6 +44,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private AvailabilityRepository availabilityRepository;
 
     @Autowired
     public UserService(UserRepository userRepository, UsersRepository usersRepository, SessionUserCodeRepository sessionUserCodeRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
@@ -228,5 +234,14 @@ public class UserService implements IUserService {
         return new com.DriverSystem_Back.modules.user.dto.UserResponse(user, roleName);
 
     }
+
+
+    @Operation(summary = "Obtenene empleados disponbiles", description = "Devuelve un lista de todo los empleados disponibles ")
+
+    @Override
+    public List<Availability> getEmployee() {
+        return this.availabilityRepository.findByAvailability(true);
+    }
+
 
 }
