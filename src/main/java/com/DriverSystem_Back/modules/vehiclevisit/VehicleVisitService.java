@@ -111,24 +111,28 @@ public class VehicleVisitService implements IVehicleVisitService {
     /**
      * Crea una WorkOrder automáticamente basada en una VehicleVisit
      */
+
     private void createWorkOrderFromVisit(VehicleVisit vehicleVisit) {
         WorkOrder workOrder = new WorkOrder();
-        
+
         // Asignar información básica
         workOrder.setVehicleId(vehicleVisit.getVehicleId());
         workOrder.setCustomerId(vehicleVisit.getCustomerId());
         workOrder.setVisitId(vehicleVisit.getId()); // Asignar el visit_id
-        
+
         // Valores por defecto (puedes ajustar según tus necesidades)
         workOrder.setTypeId(1L); // ID por defecto de maintenance_type, ajustar según tu BD
         workOrder.setStatusType(1L); // ID por defecto de work_status, ajustar según tu BD
-        workOrder.setDescription("Orden de trabajo creada automáticamente desde visita #" + vehicleVisit.getId());
+        String description = (vehicleVisit.getNotes() != null && !vehicleVisit.getNotes().trim().isEmpty())
+                ? vehicleVisit.getNotes().trim()
+                : "Orden de trabajo creada automáticamente desde visita #" + vehicleVisit.getId();
+        workOrder.setDescription(description);
         workOrder.setEstimatedHours(new BigDecimal("2.00")); // 2 horas por defecto
         workOrder.setCreatedBy(vehicleVisit.getCustomerId()); // Usar el customer como creator por defecto
-        
+
         // El código se genera automáticamente por el trigger en la BD
         // opened_at se establece automáticamente por defecto en la BD
-        
+
         this.workOrderRepository.save(workOrder);
     }
 
