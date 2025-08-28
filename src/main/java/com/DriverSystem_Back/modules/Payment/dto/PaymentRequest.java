@@ -2,6 +2,9 @@ package com.DriverSystem_Back.modules.Payment.dto;
 
 import com.DriverSystem_Back.modules.Invoice.Invoice;
 import com.DriverSystem_Back.modules.Invoice.dto.InvoiceRequest;
+import com.DriverSystem_Back.modules.paymentmethod.PaymentMethod;
+import com.DriverSystem_Back.modules.user.User;
+import com.DriverSystem_Back.utils.ExistsValue;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,8 +12,10 @@ import java.math.BigDecimal;
 
 public record PaymentRequest (
         @NotNull(message = "Invoice ID es obligatorio")
-        InvoiceRequest invoice,
+        @ExistsValue(entityClass = Invoice.class, fieldName = "id", message = "No existe una factura con ese id")
+        Long invoice,
         @NotNull(message = "Method ID es obligatorio")
+        @ExistsValue(entityClass = PaymentMethod.class, fieldName = "id", message = "No existe una forma de pago  con ese id")
         Long methodId,
         @NotNull(message = "Amount es obligatorio")
         @DecimalMin(value = "0.01", message = "Amount debe ser mayor a 0")

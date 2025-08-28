@@ -5,26 +5,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
 
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "item_quotation")
+@Immutable
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "item_quotation")
 public class ItemResponse {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long quotation;
+
+    @EmbeddedId
+    private ItemResponseId id;
     private BigDecimal quantity;
-    private Long product_id;
     private String name;
     private String brand;
     private String unit;
     private BigDecimal price;
     private String categoria;
-
-
+    private BigDecimal subtotal;
 }

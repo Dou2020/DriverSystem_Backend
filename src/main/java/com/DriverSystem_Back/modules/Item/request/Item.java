@@ -22,5 +22,4 @@ public class Item {
     private Long product;
     @Column(nullable = false, precision = 14, scale = 3)
     private BigDecimal quantity;
-
 }

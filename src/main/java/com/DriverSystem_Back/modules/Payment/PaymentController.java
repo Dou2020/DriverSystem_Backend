@@ -17,5 +17,9 @@ public class PaymentController {
          this.paymentService.save(request);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/{userId}")
+    public  ResponseEntity<?> get(@PathVariable Long userId){
+        return  ResponseEntity.ok(this.paymentService.getPaymentUser(userId));
+    }
 
 }

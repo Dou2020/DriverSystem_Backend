@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -21,7 +22,7 @@ public class Invoice {
 
     private String code;
     private String type;
-    private Long workOrderId;
+    private Long quotation_id;
     private Long goodsReceiptId;
     private Long userId;
 
@@ -37,4 +38,7 @@ public class Invoice {
     private String currency;
 
     private String notes;
+    private BigDecimal total;
+    @Column(name = "outstanding_balance")
+    private  BigDecimal outstandingBalance;
 }

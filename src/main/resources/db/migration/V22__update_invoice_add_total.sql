@@ -1,0 +1,2 @@
+ALTER TABLE item
+    ADD COLUMN total DECIMAL(10,2);

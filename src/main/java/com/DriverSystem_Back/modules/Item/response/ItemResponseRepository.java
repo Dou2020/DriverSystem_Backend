@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ItemResponseRepository  extends JpaRepository<ItemResponse, Long> {
-    List<ItemResponse> findByQuotation(Long id);
+public interface ItemResponseRepository extends JpaRepository<ItemResponse, ItemResponseId> {
+    List<ItemResponse> findByIdQuotationId(Long quotationId);
 }

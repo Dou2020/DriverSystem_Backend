@@ -8,6 +8,6 @@ import java.util.List;
 public interface IPaymentService {
   public PaymentResponse save(PaymentRequest request);
   public void delete(Long id);
-  public PaymentResponse get(PaymentRequest request);
+  public List<PaymentResponse> getPaymentUser(Long UserId);
   public List<PaymentResponse> findAll();
 }

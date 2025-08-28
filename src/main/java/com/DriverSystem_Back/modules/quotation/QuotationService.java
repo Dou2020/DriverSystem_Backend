@@ -60,7 +60,8 @@ public class QuotationService implements IQuotationService {
     @Override
     public QuotationResponse get(Long id) {
         Quotation quotation = this.quotationRepository.findById(id).get();
-        List<ItemResponse> itemResponse = this.itemResponseRepository.findByQuotation(quotation.getId());
+        List<ItemResponse> itemResponse = this.itemResponseRepository.findByIdQuotationId(quotation.getId());
+
         QuotationResponse  quotationResponse = new QuotationResponse(quotation,itemResponse);
         return quotationResponse;
     }
@@ -87,7 +88,7 @@ public class QuotationService implements IQuotationService {
         List<Quotation>  list = this.quotationRepository.findByCustomerId(userId);
         List<QuotationResponse>  quotationResponseList = new ArrayList<>();
         for (Quotation quotation : list) {
-            List<ItemResponse> itemResponse = this.itemResponseRepository.findByQuotation(quotation.getId());
+            List<ItemResponse> itemResponse = this.itemResponseRepository.findByIdQuotationId(quotation.getId());
             quotationResponseList.add(new QuotationResponse(quotation,itemResponse));
         }
         return quotationResponseList;
