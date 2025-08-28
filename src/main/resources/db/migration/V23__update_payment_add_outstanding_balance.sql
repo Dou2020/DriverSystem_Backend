@@ -1,0 +1,1 @@
+ALTER  TABLE  invoice ADD COLUMN  outstanding_balance DECIMAL(10,2);
