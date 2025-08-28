@@ -32,6 +32,10 @@ public class QuotationController {
         return ResponseEntity.ok(this.quotationService.get(id));
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> QuotationUser(@PathVariable Long id){
+        return ResponseEntity.ok(this.quotationService.findAllByUserId(id));
+    }
 
 
 }

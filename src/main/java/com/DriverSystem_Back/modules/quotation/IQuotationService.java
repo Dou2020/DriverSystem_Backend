@@ -13,4 +13,5 @@ public interface IQuotationService {
   public QuotationResponse get(Long id);
   public List<QuotationResponse> findAll();
   public Quotation updataStatus(QuotationStatuRequest request);
+  public List<QuotationResponse> findAllByUserId(Long userId);
 }

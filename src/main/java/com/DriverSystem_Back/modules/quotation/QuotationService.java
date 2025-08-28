@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class QuotationService implements IQuotationService {
@@ -37,7 +34,6 @@ public class QuotationService implements IQuotationService {
         Quotation saved = this.quotationRepository.save(quotation);
         if (request.item() != null) {
             Set<Long> productosGuardados = new HashSet<>(); // asumimos que ItemRequest tiene un getProductId()
-
             for (ItemRequest item : request.item()) {
                 if (!productosGuardados.contains(item.productId() )) {
                     this.itemService.save(item, saved.getId());
@@ -47,8 +43,6 @@ public class QuotationService implements IQuotationService {
                 }
             }
         }
-
-
         return this.get(saved.getId());
     }
 
@@ -86,6 +80,17 @@ public class QuotationService implements IQuotationService {
         quotation.setApprovedAt( OffsetDateTime.now());
         return this.quotationRepository.save(quotation);
 
+    }
+
+    @Override
+    public List<QuotationResponse> findAllByUserId(Long userId) {
+        List<Quotation>  list = this.quotationRepository.findByCustomerId(userId);
+        List<QuotationResponse>  quotationResponseList = new ArrayList<>();
+        for (Quotation quotation : list) {
+            List<ItemResponse> itemResponse = this.itemResponseRepository.findByQuotation(quotation.getId());
+            quotationResponseList.add(new QuotationResponse(quotation,itemResponse));
+        }
+        return quotationResponseList;
     }
 
     public Quotation validateQuotation(Long id){

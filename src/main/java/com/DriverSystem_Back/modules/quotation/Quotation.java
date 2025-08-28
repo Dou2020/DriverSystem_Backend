@@ -26,4 +26,6 @@ public class Quotation {
     private OffsetDateTime approvedAt;
     @Column(name="approved_by")
     private Long approvedBy;
+    @Column  (name = "customer_id", insertable = false)
+    private Long customerId;
 }
