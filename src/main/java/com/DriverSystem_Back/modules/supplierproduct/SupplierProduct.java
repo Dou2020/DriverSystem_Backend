@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@IdClass(SupplierProductId.class)
 @Table(name = "supplier_product")
 @Data
 @NoArgsConstructor
@@ -18,21 +17,23 @@ import lombok.AllArgsConstructor;
 public class SupplierProduct {
 
     public SupplierProduct(Long supplierId, Long productId, Integer stockQuantity, Integer leadTimeDays) {
-        this.supplierId = supplierId;
-        this.productId = productId;
+        this.stockQuantity = stockQuantity;
+        this.leadTimeDays = leadTimeDays;
+    }
+    public SupplierProduct(User supplier, Product product, Integer stockQuantity, Integer leadTimeDays) {
+        // Initialize the embedded ID
+        this.id = new SupplierProductId(supplier.getId(), product.getId());
+
+        // Set the entity relationships
+        this.supplier = supplier;
+        this.product = product;
         this.stockQuantity = stockQuantity;
         this.leadTimeDays = leadTimeDays;
     }
 
-    @Id
-    @NotNull(message = "El ID del proveedor no puede ser nulo")
-    @Column(name = "supplier_id")
-    private Long supplierId;
+    @EmbeddedId
+    private SupplierProductId id;
 
-    @Id
-    @NotNull(message = "El ID del producto no puede ser nulo")
-    @Column(name = "product_id")
-    private Long productId;
 
     @Min(value = 0, message = "La cantidad en stock no puede ser negativa")
     @Column(name = "stock_quantity")
@@ -42,13 +43,14 @@ public class SupplierProduct {
     @Column(name = "lead_time_days")
     private Integer leadTimeDays;
 
-    // Relación con User (proveedor)
+    // Relaciones con las entidades completas
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @MapsId("supplierId")
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private User supplier;
 
-    // Relación con Product
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @MapsId("productId")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 }

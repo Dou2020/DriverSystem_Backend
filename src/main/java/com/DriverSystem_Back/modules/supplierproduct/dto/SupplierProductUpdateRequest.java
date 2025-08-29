@@ -5,19 +5,13 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class SupplierProductResponse {
-    private Long supplierId;
-    private String supplierName;
-    private String supplierEmail;
-    private Long productId;
+public class SupplierProductUpdateRequest {
     private String productName;
     private String productBrand;
+    private Long productCategoryId;
+    private String productUnit;
     private BigDecimal productPrice;
     private BigDecimal productCost;
-    private String productUnit;
-    private Long productCategoryId;
-    private String productCategory;
-    private Integer productStock;
     private Integer stockQuantity;
     private Integer leadTimeDays;
 }
