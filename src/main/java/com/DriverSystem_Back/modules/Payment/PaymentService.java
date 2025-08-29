@@ -33,8 +33,14 @@ public class PaymentService  implements IPaymentService{
        payment.setInvoice(request.invoice());
        payment.setReference(request.reference());
        Invoice invoice = this.invoiceRepository.findById(request.invoice()).get();
+       
+       // Validate payment amount is positive
+       if (request.amount().compareTo(BigDecimal.ZERO) <= 0) {
+           throw new IllegalArgumentException("Payment amount must be positive");
+       }
+       
       if(invoice.getStatus().equals("ISSUED")){
-          if(request.amount().compareTo(invoice.getTotal()) ==0){
+          if(request.amount().compareTo(invoice.getTotal()) == 0){
               invoice.setStatus("PAID");
               invoice.setOutstandingBalance(BigDecimal.ZERO);
           } else if (request.amount().compareTo(invoice.getTotal()) < 0) {
@@ -42,23 +48,29 @@ public class PaymentService  implements IPaymentService{
               invoice.setOutstandingBalance(invoice.getTotal().subtract(request.amount()));
           }
           else{
-              return null;
+              throw new IllegalArgumentException("Payment amount cannot exceed invoice total");
           }
       } else if (invoice.getStatus().equals("PARTIALLY_PAID")) {
-          if(request.amount().compareTo(invoice.getOutstandingBalance()) ==0){
+          if(request.amount().compareTo(invoice.getOutstandingBalance()) == 0){
               invoice.setStatus("PAID");
               invoice.setOutstandingBalance(BigDecimal.ZERO);
-          } else if (request.amount().compareTo(invoice.getTotal()) < 0) {
+          } else if (request.amount().compareTo(invoice.getOutstandingBalance()) < 0) {
               invoice.setOutstandingBalance(invoice.getOutstandingBalance().subtract(request.amount()));
           }
           else{
-              return null;
+              throw new IllegalArgumentException("Payment amount cannot exceed outstanding balance");
           }
+      } else if (invoice.getStatus().equals("PAID")) {
+          throw new IllegalArgumentException("Invoice is already fully paid");
       }
 
         this.invoiceRepository.save(invoice);
        this.paymentRepository.save(payment);
-       return null;
+       
+       // Create a response with the saved payment data
+       // Since PaymentView is a database view, we'll create a temporary response
+       // In a real scenario, you might want to refresh the view or use the saved payment directly
+       return new PaymentResponse(null, this.invoiceService.getInvoiser(request.invoice()));
     }
 
     @Override
