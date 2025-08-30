@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record WorkLogRequest(
+public record WorkLoggerRequest(
          Long id,
          @NotNull
          @ExistsValue(entityClass = WorkOrder.class, fieldName = "id", message = "No existe una orden con ese id")

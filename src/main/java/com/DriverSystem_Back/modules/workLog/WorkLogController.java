@@ -1,6 +1,6 @@
 package com.DriverSystem_Back.modules.workLog;
 
-import com.DriverSystem_Back.modules.workLog.dto.WorkLogRequest;
+import com.DriverSystem_Back.modules.workLog.dto.WorkLoggerRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class WorkLogController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> save(@RequestBody  @Valid  WorkLogRequest workLogRequest) {
+    public ResponseEntity<?> save(@RequestBody  @Valid WorkLoggerRequest workLogRequest) {
         return ResponseEntity.ok(this.workLogService.save(workLogRequest));
     }
 

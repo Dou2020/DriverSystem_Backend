@@ -1,14 +1,11 @@
 package com.DriverSystem_Back.modules.workLog;
 
-import com.DriverSystem_Back.exception.HttpException;
-import com.DriverSystem_Back.modules.workLog.dto.WorkLogRequest;
+import com.DriverSystem_Back.modules.workLog.dto.WorkLoggerRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class WorkLogService  implements  IWorkLongService{
@@ -19,7 +16,7 @@ public class WorkLogService  implements  IWorkLongService{
     private ModelMapper modelMapper;
 
     @Override
-    public WorkLog save(WorkLogRequest request) {
+    public WorkLog save(WorkLoggerRequest request) {
         WorkLog  workLog=  this.modelMapper.map(request,WorkLog.class);
         return this.workLogRepository.save(workLog);
     }

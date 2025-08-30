@@ -3,7 +3,7 @@
 -- ============================
 INSERT INTO app_user (username, email, phone, password_hash, user_type, doc_type, doc_number, name)
 VALUES
-    --('admin1', 'admin@taller.com', '50211111111', '$2a$10$jGKVeArX.GLopAN3BIE9LeH4DgyGmQJBOivLWlMXJVmAJaDcDEfA2', 'PERSON', 'DPI', '1234567890181', 'Gerente General'),
+    ('admin1', 'admin@taller.com', '50211111111', '$2a$10$jGKVeArX.GLopAN3BIE9LeH4DgyGmQJBOivLWlMXJVmAJaDcDEfA2', 'PERSON', 'DPI', '1234567890181', 'Gerente General'),
     ('emp1', 'empleado1@taller.com', '50222222222', '$2a$10$jGKVeArX.GLopAN3BIE9LeH4DgyGmQJBOivLWlMXJVmAJaDcDEfA2', 'PERSON', 'DPI', '2234567890101', 'Carlos Pérez'),
     ('spec1', 'especialista1@taller.com', '50233333333', '$2a$10$jGKVeArX.GLopAN3BIE9LeH4DgyGmQJBOivLWlMXJVmAJaDcDEfA2', 'PERSON', 'DPI', '3234567890101', 'Luis García'),
     ('cliente1', 'cliente1@mail.com', '50244444444', '$2a$10$jGKVeArX.GLopAN3BIE9LeH4DgyGmQJBOivLWlMXJVmAJaDcDEfA2', 'PERSON', 'DPI', '4234567890101', 'Ana López'),
