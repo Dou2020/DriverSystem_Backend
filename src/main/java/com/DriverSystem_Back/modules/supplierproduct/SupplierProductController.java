@@ -2,12 +2,14 @@ package com.DriverSystem_Back.modules.supplierproduct;
 
 import com.DriverSystem_Back.modules.supplierproduct.dto.SupplierProductRequest;
 import com.DriverSystem_Back.modules.supplierproduct.dto.SupplierProductResponse;
+import com.DriverSystem_Back.modules.supplierproduct.dto.SupplierProductUpdateRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Slf4j
 @RestController
 @RequestMapping("/api/supplier-products")
 public class SupplierProductController {
@@ -15,7 +17,7 @@ public class SupplierProductController {
     @Autowired
     private SupplierProductService service;
 
-    @GetMapping
+    @GetMapping("/")
     public List<SupplierProductResponse> getAll() {
         return service.findAll().stream()
                 .map(service::toResponseDTO)
@@ -36,20 +38,30 @@ public class SupplierProductController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping
-    public SupplierProductResponse create(@Valid @RequestBody SupplierProductRequest dto) {
+    @PostMapping("/")
+    public SupplierProductResponse create( @Valid @RequestBody SupplierProductRequest dto) {
         SupplierProduct entity = service.fromRequestDTO(dto);
+
         return service.toResponseDTO(service.save(entity));
     }
 
-    @PutMapping
-    public SupplierProductResponse update(@Valid @RequestBody SupplierProductRequest dto) {
-        SupplierProduct entity = service.fromRequestDTO(dto);
-        return service.toResponseDTO(service.save(entity));
-    }
+//    @PutMapping("/")
+//    public SupplierProductResponse update(@Valid @RequestBody SupplierProductRequest dto) {
+//        SupplierProduct entity = service.fromRequestDTO(dto);
+//        return service.toResponseDTO(service.save(entity));
+//    }
 
     @DeleteMapping("/{supplierId}/{productId}")
     public void delete(@PathVariable Long supplierId, @PathVariable Long productId) {
         service.deleteById(new SupplierProductId(supplierId, productId));
+    }
+
+    // En `src/main/java/com/DriverSystem_Back/modules/supplierProduct/SupplierProductController.java`
+    @PutMapping("/{supplierId}/{productId}")
+    public SupplierProductResponse updateSupplierProduct(
+            @PathVariable Long supplierId,
+            @PathVariable Long productId,
+            @RequestBody SupplierProductUpdateRequest request) {
+        return service.update(supplierId, productId, request);
     }
 }
