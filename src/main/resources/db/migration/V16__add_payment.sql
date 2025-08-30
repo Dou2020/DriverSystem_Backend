@@ -66,7 +66,7 @@ VALUES
     (2, '2025-08-26 12:30:00', 3),
     (1, '2025-08-25 09:15:00', 4),
     (2, '2025-08-24 14:45:00', 5),
-    (1, '2025-08-23 16:20:00', 6);
+    (1, '2025-08-23 16:20:00', 5);
 
 
 
@@ -117,7 +117,7 @@ VALUES
     ( 'CUSTOMER', 2, NULL, 3, 'PARTIALLY_PAID', 'GTQ', 'Factura parcial por materiales'),
     ( 'CUSTOMER', 3, NULL, 4, 'PAID', 'USD', 'Factura completa cliente internacional'),
     ( 'SUPPLIER', NULL, 1, 5, 'ISSUED', 'GTQ', 'Factura de proveedor local'),
-    ( 'SUPPLIER', NULL, 2, 6, 'PAID', 'USD', 'Factura proveedor internacional');
+    ( 'SUPPLIER', NULL, 2, 5, 'PAID', 'USD', 'Factura proveedor internacional');
 
 -- Payment methods
 CREATE TABLE payment_method (
