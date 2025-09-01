@@ -2,6 +2,9 @@ package com.DriverSystem_Back.modules.user;
 
 import com.DriverSystem_Back.modules.Userrole.UserRoleRequest;
 import com.DriverSystem_Back.modules.Userrole.UserRoleService;
+import com.DriverSystem_Back.modules.authentication.dto.SessionUserCodeDto;
+import com.DriverSystem_Back.modules.authentication.service.LoginService;
+import com.DriverSystem_Back.modules.authentication.service.SessionUserCodeService;
 import com.DriverSystem_Back.modules.role.RoleRepository;
 
 import com.DriverSystem_Back.exception.HttpException;
@@ -18,10 +21,13 @@ import com.DriverSystem_Back.properties.EmailProperties;
 import com.DriverSystem_Back.utils.CodeUtils;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements IUserService {
 
     private UserRepository userRepository;
@@ -42,6 +49,9 @@ public class UserService implements IUserService {
     private UserRoleRepository userRoleRepository;
     @Autowired
     private UserRoleService userRoleService;
+
+    private LoginService loginService;
+    private SessionUserCodeService sessionUserCodeService;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -238,6 +248,7 @@ public class UserService implements IUserService {
         // Actualizar la contraseña
         existingUser.setPasswordHash(passwordEncoder.encode(user.newPassword()));
         this.userRepository.save(existingUser);
+
 
         return new UserResetPassword(user.code(), user.newPassword());
     }

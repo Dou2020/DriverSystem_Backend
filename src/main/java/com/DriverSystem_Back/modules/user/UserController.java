@@ -68,8 +68,8 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
     @PostMapping("/reset/code")
-    public ResponseEntity<?> sendCodePassword(@RequestBody @Valid UserSendEmail request){
-        UserSendEmail user = this.userService.sendCodePassword(request);
+    public ResponseEntity<?> sendCodePassword(@RequestBody @Valid UserCodePassword request){
+        UserCodePassword user = this.userService.sendCodePassword(request);
         return ResponseEntity.ok().body(user);
     }
 

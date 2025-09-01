@@ -14,7 +14,7 @@ public interface IUserService {
     public UserActiveUser updateActiveUser(UserActiveUser user);
     public UserSendEmail updateSendEmail(UserSendEmail user);
     public UserResetPassword updatePassword(UserResetPassword user);
-    public UserSendEmail sendCodePassword(UserSendEmail user);
+    public UserCodePassword sendCodePassword(UserCodePassword user);
     public UserResponse  getUserDocType(String docNumer);
     // lista de empleado disponbiles
     public List<Availability> getEmployee();

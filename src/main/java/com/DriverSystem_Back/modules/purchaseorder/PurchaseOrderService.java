@@ -32,9 +32,8 @@ public class PurchaseOrderService implements IOpurchaseOrderService {
             .code(request.getCode())
             .supplier(supplier)
             .status(request.getStatus())
-            .orderedAt(request.getOrderedAt())
             .expectedAt(request.getExpectedAt())
-            .currency(request.getCurrency())
+            .currency(request.getCurrency() != null ? request.getCurrency() : "GTQ")
             .notes(request.getNotes())
             .build();
 

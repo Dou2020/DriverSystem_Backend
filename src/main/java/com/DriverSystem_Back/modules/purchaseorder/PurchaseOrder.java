@@ -28,14 +28,14 @@ public class PurchaseOrder {
     @Column(nullable = false)
     private String status;
 
-    @Column(name = "ordered_at", nullable = false)
+    @Column(name = "ordered_at", columnDefinition = "timestamptz", insertable = false, updatable = false)
     private OffsetDateTime orderedAt;
 
     @Column(name = "expected_at")
     private LocalDate expectedAt;
 
     @Column(length = 3, nullable = false)
-    private String currency;
+    private String currency = "GTQ";
 
     private String notes;
 
