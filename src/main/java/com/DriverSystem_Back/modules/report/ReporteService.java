@@ -37,7 +37,7 @@ public class ReporteService {
 
     /*Reporte de trabajos realizados (fecha, tipo, mecánico)*/
     public List<Map<String, Object>> workOrderUser(ReportWorkUserRequest request) {
-        return this.reportRepository.getTrabajosRealizados(request.dateStart(), request.dateEnd(),request.typeMantenimiento(),request.userName());
+        return this.reportRepository.getTrabajosRealizados(request.dateStart(), request.dateEnd(),request.typeMantenimiento(),request.userId());
     }
 
     /*Uso de repuestos por período*/

@@ -51,7 +51,6 @@ public class ReporteController {
 /*
 Reportes Financieros y de Facturación (Reporte de ingresos y egresos por período, Reporte de egresos a proveedores )
 
- Repuestos más usados por tipo de vehículo)
 
 Reportes de Clientes y Atención (Historial de servicios por cliente, Reporte de calificaciones de servicio )
 

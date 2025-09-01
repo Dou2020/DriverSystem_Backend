@@ -39,29 +39,31 @@ public interface ReportRepository extends JpaRepository<WorkOrder, Long> {
 
         // Reporte de trabajos realizados (fecha, tipo, mecánico)
         @Query(value = """
-        SELECT 
+          SELECT
             DATE(gwo.closed_at) as fecha,
             gwo.code,
             gwo.status,
             gwo.description,
             gwo.maintenance_type,
             au.name as employee,
-           --  au.doc_number,
-            au.username
+            wa.assigned_at
+            --  au.doc_number,
+            --  au.username
         FROM work_assignment wa
         INNER JOIN app_user au ON wa.assignee_id = au.id
         INNER JOIN get_work_order gwo ON gwo.id = wa.work_order_id
-        WHERE gwo.status = 'Completed'
+        INNER JOIN maintenance_type mt ON mt.name= gwo.maintenance_type
+       -- WHERE gwo.status = 'Completed'
           AND DATE(gwo.closed_at) BETWEEN :fechaInicio AND :fechaFin
-          AND (:tipo IS NULL OR gwo.maintenance_type = :tipo)
-          AND (:username IS NULL OR au.username = :username)
+          AND (:tipo IS NULL OR  mt.id = :tipo)
+          AND (:userId IS NULL OR au.id = :userId)
         ORDER BY DATE(gwo.closed_at)
         """, nativeQuery = true)
         List<Map<String, Object>> getTrabajosRealizados(
                 @Param("fechaInicio") LocalDate fechaInicio,
                 @Param("fechaFin") LocalDate fechaFin,
-                @Param("tipo") String tipo,
-                @Param("username") String username
+                @Param("tipo") Long tipo,
+                @Param("userId") Long  userId
         );
 
         // Uso de repuestos por período

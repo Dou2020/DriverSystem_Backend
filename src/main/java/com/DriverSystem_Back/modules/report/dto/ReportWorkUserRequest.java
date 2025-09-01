@@ -5,8 +5,8 @@ import java.time.LocalDate;
 public record ReportWorkUserRequest(
         LocalDate dateStart,
         LocalDate dateEnd,
-        String userName,
-        String  typeMantenimiento
+        Long userId,
+        Long  typeMantenimiento
         ) {
 
 }
