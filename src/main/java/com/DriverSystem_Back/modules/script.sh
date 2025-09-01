@@ -5,7 +5,7 @@
 # ---------------------------
 
 # Variable global para el nombre del proyecto/carpeta
-PROJECT_NAME="Invoice"
+PROJECT_NAME="ServiceFeedback"
 
 # Crear la carpeta principal
 mkdir -p "${PROJECT_NAME}"

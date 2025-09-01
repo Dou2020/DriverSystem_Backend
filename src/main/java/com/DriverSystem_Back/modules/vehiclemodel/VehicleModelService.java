@@ -46,11 +46,13 @@ public class VehicleModelService  implements  IVehicleModelService{
 
     @Override
     public VehicleModel update(VehicleModelRequest vehicleModel) {
-        VehicleModel vehicleModelUpdate = this.validate(vehicleModel.id()).get();
+        VehicleModel vehicleModelUpdate = this.validate(vehicleModel.id())
+                .orElseThrow(() -> new HttpException("No existe el modelo!", HttpStatus.NOT_FOUND));
 
-        Optional<VehicleMake> vehicleMakeOptional = vehicleMakeRepository.findById(vehicleModel.id());
-        if(vehicleMakeOptional.isEmpty())
-            throw  new HttpException("No existe la marca!", HttpStatus.NOT_FOUND);
+        // Aquí validamos que exista la marca usando el makeId
+        Optional<VehicleMake> vehicleMakeOptional = vehicleMakeRepository.findById(vehicleModel.makeId());
+        if (vehicleMakeOptional.isEmpty())
+            throw new HttpException("No existe la marca!", HttpStatus.NOT_FOUND);
 
         vehicleModelUpdate.setName(vehicleModel.name());
         vehicleModelUpdate.setMakeId(vehicleModel.makeId());
@@ -58,9 +60,10 @@ public class VehicleModelService  implements  IVehicleModelService{
     }
 
 
+
     @Override
     public void deleteVehicleModel(Long id) {
-        this.validate(id);
+      //  this.validate(id);
         this.vehicleRepository.deleteById(id);
     }
 
