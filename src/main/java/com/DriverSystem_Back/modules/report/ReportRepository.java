@@ -89,12 +89,12 @@ public interface ReportRepository extends JpaRepository<WorkOrder, Long> {
     @Query(value = """
       SELECT
        iq.product_id,
-       iq."name" AS product,
+       iq."name" AS product_name,
        v.plate,
        v.make,
        v.model,
        v.model_year,
-       COUNT(*) AS veces_usado
+       COUNT(*) AS total_quantity
    FROM  vehicle_model m
     inner join   getvehicle v on m.name=v.model
    INNER JOIN work_order wo ON wo.vehicle_id = v.id
@@ -102,7 +102,7 @@ public interface ReportRepository extends JpaRepository<WorkOrder, Long> {
    INNER JOIN item_quotation iq ON iq.quotation = q.id
    WHERE m.name = :model
    GROUP BY iq.product_id, iq."name", v.plate, v.make, v.model, v.model_year
-   ORDER BY veces_usado DESC;
+   ORDER BY total_quantity DESC;
    """, nativeQuery = true)
     List<Map<String, Object>> getRepuestosPorVehiculo(
             @Param("model") String model
