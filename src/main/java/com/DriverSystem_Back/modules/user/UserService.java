@@ -8,14 +8,16 @@ import com.DriverSystem_Back.exception.HttpException;
 import com.DriverSystem_Back.modules.Userrole.UserRole;
 import com.DriverSystem_Back.modules.Userrole.UserRoleRepository;
 import com.DriverSystem_Back.modules.authentication.repository.SessionUserCodeRepository;
-import com.DriverSystem_Back.modules.authentication.repository.crud.SessionUserCodeCrud;
 import com.DriverSystem_Back.modules.authentication.repository.entity.SessionUserCode;
 import com.DriverSystem_Back.modules.user.dto.*;
 import com.DriverSystem_Back.modules.user.useravailability.Availability;
 import com.DriverSystem_Back.modules.user.useravailability.AvailabilityRepository;
-import com.DriverSystem_Back.modules.users.repository.UsersRepository;
 import com.DriverSystem_Back.modules.users.repository.entities.Users;
-import io.swagger.v3.oas.annotations.Operation;
+import com.DriverSystem_Back.modules.authentication.repository.entity.MfaType;
+import com.DriverSystem_Back.properties.EmailProperties;
+import com.DriverSystem_Back.utils.CodeUtils;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,7 +34,6 @@ public class UserService implements IUserService {
 
     private UserRepository userRepository;
     // reset Password
-    private final UsersRepository usersRepository;
     private final SessionUserCodeRepository sessionUserCodeRepository;
 
     private  ModelMapper modelMapper;
@@ -46,12 +47,20 @@ public class UserService implements IUserService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private EmailProperties emailProperties;
+
+    @Autowired
+    private ResetTokenRepository resetTokenRepository;
+
+    @Autowired
     private AvailabilityRepository availabilityRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, UsersRepository usersRepository, SessionUserCodeRepository sessionUserCodeRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, SessionUserCodeRepository sessionUserCodeRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.usersRepository = usersRepository;
         this.sessionUserCodeRepository = sessionUserCodeRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
@@ -185,30 +194,85 @@ public class UserService implements IUserService {
 
     @Override
     public UserResetPassword updatePassword(UserResetPassword user) {
-        Optional<SessionUserCode> userCodeOptional = sessionUserCodeRepository.findByCode(user.code());
+        User existingUser = null;
 
-        if(userCodeOptional.isEmpty()){
-            throw new HttpException("El codigo es invalido",HttpStatus.NOT_FOUND);
+        // Primero buscar en reset_tokens (recuperación de contraseña)
+        Optional<ResetToken> resetTokenOptional = resetTokenRepository.findByToken(user.code());
+        if (resetTokenOptional.isPresent()) {
+            ResetToken resetToken = resetTokenOptional.get();
+
+            if (resetToken.isUsed()) {
+                throw new HttpException("El código ya fue utilizado", HttpStatus.BAD_REQUEST);
+            }
+
+            if (resetToken.isExpired()) {
+                throw new HttpException("El código expiró", HttpStatus.BAD_REQUEST);
+            }
+
+            // Buscar usuario por email
+            existingUser = this.userRepository.findByEmail(resetToken.getEmail())
+                    .orElseThrow(() -> new HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
+
+            // Marcar el token como usado
+            resetToken.setUsed(true);
+            resetTokenRepository.save(resetToken);
+        } else {
+            // Si no está en reset_tokens, buscar en user_mfa (MFA)
+            Optional<SessionUserCode> userCodeOptional = sessionUserCodeRepository.findByCode(user.code());
+
+            if (userCodeOptional.isEmpty()) {
+                throw new HttpException("El código es inválido", HttpStatus.NOT_FOUND);
+            }
+
+            SessionUserCode sessionUserCode = userCodeOptional.get();
+
+            if (sessionUserCode.getTsExpired().isBefore(OffsetDateTime.now())) {
+                throw new HttpException("El código expiró", HttpStatus.BAD_REQUEST);
+            }
+
+            // Buscar usuario por ID
+            existingUser = this.userRepository.findById(sessionUserCode.getUser().getId())
+                    .orElseThrow(() -> new HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
         }
 
-        SessionUserCode sessionUserCode = userCodeOptional.get();
+        // Actualizar la contraseña
+        existingUser.setPasswordHash(passwordEncoder.encode(user.newPassword()));
+        this.userRepository.save(existingUser);
 
-        if(sessionUserCode.getTsExpired().isBefore(OffsetDateTime.now())){
-            throw new HttpException("El codigo Expiró", HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        User existingUser = this.userRepository.findById(sessionUserCode.getUser().getId())
-                .orElseThrow(() ->  new  HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
-
-
-
-
-        return null;
+        return new UserResetPassword(user.code(), user.newPassword());
     }
 
     @Override
     public UserSendEmail sendCodePassword(UserSendEmail user) {
-        return null;
+        // Buscar el usuario por ID
+        User existingUser = this.userRepository.findById(user.id())
+                .orElseThrow(() -> new HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
+
+        // Generar código de verificación
+        String verificationCode = CodeUtils.generateVerificationCode();
+
+        // Crear SessionUserCode para almacenar el código
+        SessionUserCode sessionUserCode = new SessionUserCode();
+        sessionUserCode.setCode(verificationCode);
+
+        // Crear Users entity para la relación (mapeo manual ya que Users y User son similares)
+        Users usersEntity = new Users();
+        usersEntity.setId(existingUser.getId());
+        usersEntity.setEmail(existingUser.getEmail());
+        usersEntity.setUserName(existingUser.getUserName());
+
+        sessionUserCode.setUser(usersEntity);
+        sessionUserCode.setMfaType(MfaType.EMAIL);
+        sessionUserCode.setEnabled(true);
+        sessionUserCode.setTsExpired(OffsetDateTime.now().plusMinutes(5)); // Expira en 5 minutos
+
+        // Guardar el código en la base de datos
+        this.sessionUserCodeRepository.saveSessionUser(sessionUserCode);
+
+        // Enviar email con el código
+        sendPasswordResetCodeEmail(existingUser.getEmail(), verificationCode);
+
+        return new UserSendEmail(existingUser.getId(), true);
     }
 
     public  Optional<User> validateUser(Long id){
@@ -235,8 +299,21 @@ public class UserService implements IUserService {
 
     }
 
+    private void sendPasswordResetCodeEmail(String email, String code) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setSubject("Código de recuperación de contraseña - DriverSystem");
+            message.setText("Tu código de recuperación de contraseña es: " + code +
+                          "\n\nEste código expirará en 5 minutos." +
+                          "\n\nSi no solicitaste este código, ignora este mensaje.");
+            message.setFrom(emailProperties.getUsername());
 
-    @Operation(summary = "Obtenene empleados disponbiles", description = "Devuelve un lista de todo los empleados disponibles ")
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new HttpException("No se pudo enviar el correo: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @Override
     public List<Availability> getEmployee() {

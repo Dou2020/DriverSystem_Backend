@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import com.DriverSystem_Back.modules.user.PasswordResetService;
 
 @Service
 @RestController
@@ -16,6 +17,9 @@ import java.util.List;
 public class UserController {
     @Autowired
     private  IUserService userService;
+
+    @Autowired
+    private PasswordResetService passwordResetService;
 
     @PostMapping("/register")
     public ResponseEntity<?> RegisterUser(@RequestBody @Valid UserRequest body) {
@@ -85,6 +89,27 @@ public class UserController {
         return ResponseEntity.ok(this.userService.getEmployee());
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody @Valid ForgotPasswordRequest request) {
+        try {
+            passwordResetService.initiatePasswordReset(request.email());
+            return ResponseEntity.ok().body("Se ha enviado un email con las instrucciones para restablecer tu contraseña");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al procesar la solicitud: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
+        try {
+            passwordResetService.resetPassword(request.code(), request.newPassword());
+            return ResponseEntity.ok().body("Contraseña restablecida exitosamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error al restablecer la contraseña: " + e.getMessage());
+        }
+    }
 
 
 
