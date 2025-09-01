@@ -45,13 +45,42 @@ public class ReporteController {
     public ResponseEntity<?> reportpartVehiculo(@PathVariable String model) {
         return ResponseEntity.ok(this.reporteService.repuestosVehiculo(model));
     }
+
+    // Reportes Financieros y de Facturación (Reporte de ingresos y egresos por período, Reporte de egresos a proveedores )
+
+    @Operation(summary = "Reporte de ingresos y egresos  por perido de tiempo")
+    @PostMapping("financial/management")
+    public ResponseEntity<?> reportIngresosEgressos(@RequestBody PeriodoRequest request) {
+        return ResponseEntity.ok(this.reporteService.ReporteIngresosEgresos(request));
+    }
+
+    @Operation(summary = "Reporte de egresos a proveedores ")
+    @PostMapping("financial/proveedor")
+    public ResponseEntity<?> reportFiancialProveedor(@RequestBody PeriodoRequest request) {
+        return ResponseEntity.ok(this.reporteService.getSupplierExpensesDetail(request));
+    }
+
+
+    //Reportes de Clientes y Atención (Historial de servicios por cliente, Reporte de calificaciones de servicio )
+    @Operation(summary = "Historial de servicio por cliente ")
+    @GetMapping("service/cliente/{id}")
+    public ResponseEntity<?> reportFiancialProveedor(@PathVariable Long id) {
+        return ResponseEntity.ok(this.reporteService.serviceCliente(id));
+    }
+
+    @Operation(summary = "Reporte de calificacion de servicio")
+    @GetMapping("service/ranging")
+    public ResponseEntity<?> serviceRanging() {
+        return ResponseEntity.ok(this.reporteService.calificacionService());
+    }
+
+
+
+
+
+
+
+
 }
 
 
-/*
-Reportes Financieros y de Facturación (Reporte de ingresos y egresos por período, Reporte de egresos a proveedores )
-
-
-Reportes de Clientes y Atención (Historial de servicios por cliente, Reporte de calificaciones de servicio )
-
-*/

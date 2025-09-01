@@ -50,5 +50,27 @@ public class ReporteService {
         return this.reportRepository.getRepuestosPorVehiculo(request);
     }
 
+    // Reportes Financieros y de Facturación (Reporte de ingresos y egresos porperíodo,
+    public List<Map<String, Object>> ReporteIngresosEgresos(PeriodoRequest request) {
+        return this.reportRepository.getFinancialSummaryByPeriod(request.dateStart(), request.dateEnd());
+    }
+
+    //Reporte de egresos a proveedores )
+    public List<Map<String, Object>> getSupplierExpensesDetail(PeriodoRequest request) {
+        return this.reportRepository.getSupplierExpensesDetail(request.dateStart(), request.dateEnd());
+    }
+
+    //Historial de servicios por cliente,
+    public List<Map<String, Object>> serviceCliente(Long id) {
+        return this.reportRepository.getCustomerServiceHistory(id);
+    }
+
+    // Reporte de calificaciones de servicio )
+    public List<Map<String, Object>> calificacionService() {
+        return this.reportRepository.getServiceRatingsReport();
+    }
+
+
+
 
 }

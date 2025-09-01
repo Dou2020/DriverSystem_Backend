@@ -108,6 +108,40 @@ public interface ReportRepository extends JpaRepository<WorkOrder, Long> {
             @Param("model") String model
     );
 
+    @Query(value = """
+       SELECT * FROM get_financial_summary_by_period(:startDate, :endDate);
+   """, nativeQuery = true)
+    List<Map<String, Object>> getFinancialSummaryByPeriod(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
+
+    // Gastos por proveedor
+    @Query(value = """
+           SELECT * FROM get_supplier_expenses_detail(:startDate, :endDate);
+       """, nativeQuery = true)
+    List<Map<String, Object>> getSupplierExpensesDetail(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
+    // Calificaciones de servicio
+
+    @Query(value = """
+           SELECT * FROM service_ratings_report;
+       """, nativeQuery = true)
+    List<Map<String, Object>> getServiceRatingsReport();
+
+
+    // Historial de un cliente específico
+
+    @Query(value = """
+           SELECT * FROM get_customer_service_history(:customerId);
+       """, nativeQuery = true)
+    List<Map<String, Object>> getCustomerServiceHistory(
+            @Param("customerId") Long customerId
+    );
 
 }
 
