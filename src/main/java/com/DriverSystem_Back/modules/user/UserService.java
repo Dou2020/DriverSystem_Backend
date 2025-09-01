@@ -2,6 +2,9 @@ package com.DriverSystem_Back.modules.user;
 
 import com.DriverSystem_Back.modules.Userrole.UserRoleRequest;
 import com.DriverSystem_Back.modules.Userrole.UserRoleService;
+import com.DriverSystem_Back.modules.authentication.dto.SessionUserCodeDto;
+import com.DriverSystem_Back.modules.authentication.service.LoginService;
+import com.DriverSystem_Back.modules.authentication.service.SessionUserCodeService;
 import com.DriverSystem_Back.modules.role.RoleRepository;
 
 import com.DriverSystem_Back.exception.HttpException;
@@ -15,11 +18,16 @@ import com.DriverSystem_Back.modules.user.useravailability.Availability;
 import com.DriverSystem_Back.modules.user.useravailability.AvailabilityRepository;
 import com.DriverSystem_Back.modules.users.repository.UsersRepository;
 import com.DriverSystem_Back.modules.users.repository.entities.Users;
+import com.DriverSystem_Back.properties.EmailProperties;
+import com.DriverSystem_Back.utils.CodeUtils;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements IUserService {
 
     private UserRepository userRepository;
@@ -41,6 +50,9 @@ public class UserService implements IUserService {
     private UserRoleRepository userRoleRepository;
     @Autowired
     private UserRoleService userRoleService;
+
+    private LoginService loginService;
+    private SessionUserCodeService sessionUserCodeService;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -200,15 +212,26 @@ public class UserService implements IUserService {
         User existingUser = this.userRepository.findById(sessionUserCode.getUser().getId())
                 .orElseThrow(() ->  new  HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND));
 
+        existingUser.setPasswordHash(passwordEncoder.encode(user.newPassword()));
+        this.userRepository.save(existingUser);
 
-
-
-        return null;
+        return new UserResetPassword(user.code(), user.newPassword());
     }
 
     @Override
-    public UserSendEmail sendCodePassword(UserSendEmail user) {
-        return null;
+    public UserCodePassword sendCodePassword(UserCodePassword user) {
+        Optional<User> userOptional = this.userRepository.findByEmail(user.email());
+        if(userOptional.isEmpty()){
+            throw new HttpException("Usuario no encontrado", HttpStatus.NOT_FOUND);
+        }
+        String userCode = CodeUtils.generateVerificationCode();
+        loginService.sendEmail(user.email(), "Código de verificación", "Su código de verificación es: " + userCode);
+        SessionUserCodeDto sessionUserCodeDto = new SessionUserCodeDto();
+        sessionUserCodeDto.setCode(userCode);
+        sessionUserCodeDto.setUserId(userOptional.get().getId());
+        sessionUserCodeDto.setTsExpired(OffsetDateTime.now().plusMinutes(5));
+        sessionUserCodeService.updateOrSaveSessionCode(sessionUserCodeDto);
+        return new UserCodePassword(user.email());
     }
 
     public  Optional<User> validateUser(Long id){

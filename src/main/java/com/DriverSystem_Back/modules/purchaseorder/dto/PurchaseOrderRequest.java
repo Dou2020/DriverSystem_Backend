@@ -10,7 +10,6 @@ public class PurchaseOrderRequest {
     private String code;
     private Long supplierId;
     private String status;
-    private OffsetDateTime orderedAt;
     private LocalDate expectedAt;
     private String currency;
     private String notes;
